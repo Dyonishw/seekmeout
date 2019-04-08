@@ -1,0 +1,31 @@
+{
+  "seekMeOutApp": {
+    "place": {
+      "home": {
+        "title": "Places",
+        "createLabel": "Create a new Place",
+        "createOrEditLabel": "Create or edit a Place",
+        "search": "Search for Place"
+      },
+      "created": "A new Place is created with identifier {{ param }}",
+      "updated": "A Place is updated with identifier {{ param }}",
+      "deleted": "A Place is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Place {{ id }}?"
+      },
+      "detail": {
+        "title": "Place"
+      },
+      "address": "Address",
+      "possibleActivities": "Possible Activities",
+      "phoneNumber": "Phone Number",
+      "description": "Description",
+      "openHours": "Open Hours",
+      "name": "Name",
+      "pricePerHour": "Price Per Hour",
+      "contactForm": "Contact Form",
+      "activityPlace": "Activity Place",
+      "placeEvent": "Place Event"
+    }
+  }
+}

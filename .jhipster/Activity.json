@@ -1,0 +1,67 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "activityPlace",
+            "otherEntityName": "place",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "activityPlace",
+            "otherEntityRelationshipNameUndefined": false
+        },
+        {
+            "relationshipName": "activityEvent",
+            "otherEntityName": "event",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "activityEvent",
+            "otherEntityRelationshipNameUndefined": false
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "numberOfPlayers",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "2"
+        },
+        {
+            "fieldName": "officialDuration",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "officialRules",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "shortDescription",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength"
+            ],
+            "fieldValidateRulesMinlength": "15"
+        },
+        {
+            "fieldName": "recommendedGear",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20190408054156",
+    "dto": "mapstruct",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "activity",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

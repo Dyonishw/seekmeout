@@ -1,0 +1,54 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "activityEvent",
+            "otherEntityName": "activity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "type"
+        },
+        {
+            "relationshipName": "placeEvent",
+            "otherEntityName": "place",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "activityType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "takingPlaceAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "peopleAttending",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "casual",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "hour",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20190408060336",
+    "dto": "mapstruct",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "event",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

@@ -1,0 +1,90 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "activityPlace",
+            "otherEntityName": "activity",
+            "relationshipType": "many-to-many",
+            "relationshipValidateRules": [],
+            "otherEntityField": "type",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "activityPlace"
+        },
+        {
+            "relationshipName": "placeEvent",
+            "otherEntityName": "event",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "placeEvent"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "address",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "possibleActivities",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "phoneNumber",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "15",
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "openHours",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength"
+            ],
+            "fieldValidateRulesMinlength": "3"
+        },
+        {
+            "fieldName": "pricePerHour",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "1"
+        },
+        {
+            "fieldName": "contactForm",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20190408055125",
+    "dto": "mapstruct",
+    "searchEngine": "elasticsearch",
+    "service": "serviceImpl",
+    "entityTableName": "place",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}
