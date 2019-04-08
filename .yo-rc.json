@@ -1,0 +1,43 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.dyonishw.seekmeout",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "5.8.2",
+    "applicationType": "monolith",
+    "baseName": "SeekMeOut",
+    "packageName": "com.dyonishw.seekmeout",
+    "packageFolder": "com/dyonishw/seekmeout",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "OTVhZjZkZmQ4YTJiZDhkYjhlMGIyNmFjOWIzNWIyY2MzNGEwNTNlYjQ2MWZmMGFhNjE1MGUzMGM4YWViOTEzYWI0YjE1ZDgzZmM5ZWJmOTRlNjVhOWJlMzc4MWVlYmQ1NTMyZDUxZmIzNGQzN2FhNmU3NzliNmNiMTJlZjk3MmM=",
+    "clientFramework": "react",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "testFrameworks": [
+      "gatling",
+      "cucumber"
+    ],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en"
+    ]
+  }
+}
