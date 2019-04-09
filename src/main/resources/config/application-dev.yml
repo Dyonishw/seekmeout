@@ -44,9 +44,9 @@ spring:
             indent-output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/seekmeout
-        username: postgres
-        password: 1234
+        url: jdbc:postgresql://localhost:5432/SeekMeOut
+        username: SeekMeOut
+        password:
         hikari:
             poolName: Hikari
             auto-commit: false

@@ -36,6 +36,8 @@ public class ActivityCriteria implements Serializable {
 
     private StringFilter recommendedGear;
 
+    private StringFilter longDescription;
+
     private LongFilter activityPlaceId;
 
     private LongFilter activityEventId;
@@ -96,6 +98,14 @@ public class ActivityCriteria implements Serializable {
         this.recommendedGear = recommendedGear;
     }
 
+    public StringFilter getLongDescription() {
+        return longDescription;
+    }
+
+    public void setLongDescription(StringFilter longDescription) {
+        this.longDescription = longDescription;
+    }
+
     public LongFilter getActivityPlaceId() {
         return activityPlaceId;
     }
@@ -130,6 +140,7 @@ public class ActivityCriteria implements Serializable {
             Objects.equals(officialRules, that.officialRules) &&
             Objects.equals(shortDescription, that.shortDescription) &&
             Objects.equals(recommendedGear, that.recommendedGear) &&
+            Objects.equals(longDescription, that.longDescription) &&
             Objects.equals(activityPlaceId, that.activityPlaceId) &&
             Objects.equals(activityEventId, that.activityEventId);
     }
@@ -144,6 +155,7 @@ public class ActivityCriteria implements Serializable {
         officialRules,
         shortDescription,
         recommendedGear,
+        longDescription,
         activityPlaceId,
         activityEventId
         );
@@ -159,6 +171,7 @@ public class ActivityCriteria implements Serializable {
                 (officialRules != null ? "officialRules=" + officialRules + ", " : "") +
                 (shortDescription != null ? "shortDescription=" + shortDescription + ", " : "") +
                 (recommendedGear != null ? "recommendedGear=" + recommendedGear + ", " : "") +
+                (longDescription != null ? "longDescription=" + longDescription + ", " : "") +
                 (activityPlaceId != null ? "activityPlaceId=" + activityPlaceId + ", " : "") +
                 (activityEventId != null ? "activityEventId=" + activityEventId + ", " : "") +
             "}";

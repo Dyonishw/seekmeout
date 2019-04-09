@@ -117,6 +117,9 @@ public class PlaceQueryService extends QueryService<Place> {
             if (criteria.getContactForm() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getContactForm(), Place_.contactForm));
             }
+            if (criteria.getFacilities() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFacilities(), Place_.facilities));
+            }
             if (criteria.getActivityPlaceId() != null) {
                 specification = specification.and(buildSpecification(criteria.getActivityPlaceId(),
                     root -> root.join(Place_.activityPlaces, JoinType.LEFT).get(Activity_.id)));

@@ -26,6 +26,8 @@ public class ActivityDTO implements Serializable {
 
     private String recommendedGear;
 
+    private String longDescription;
+
 
     public Long getId() {
         return id;
@@ -83,6 +85,14 @@ public class ActivityDTO implements Serializable {
         this.recommendedGear = recommendedGear;
     }
 
+    public String getLongDescription() {
+        return longDescription;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -114,6 +124,7 @@ public class ActivityDTO implements Serializable {
             ", officialRules='" + getOfficialRules() + "'" +
             ", shortDescription='" + getShortDescription() + "'" +
             ", recommendedGear='" + getRecommendedGear() + "'" +
+            ", longDescription='" + getLongDescription() + "'" +
             "}";
     }
 }

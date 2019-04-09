@@ -54,6 +54,10 @@
         {
             "fieldName": "recommendedGear",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "longDescription",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20190408054156",

@@ -63,6 +63,16 @@ public class Place implements Serializable {
     @Column(name = "contact_form")
     private String contactForm;
 
+    @Lob
+    @Column(name = "pictures")
+    private byte[] pictures;
+
+    @Column(name = "pictures_content_type")
+    private String picturesContentType;
+
+    @Column(name = "facilities")
+    private String facilities;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "place_activity_place",
@@ -186,6 +196,45 @@ public class Place implements Serializable {
         this.contactForm = contactForm;
     }
 
+    public byte[] getPictures() {
+        return pictures;
+    }
+
+    public Place pictures(byte[] pictures) {
+        this.pictures = pictures;
+        return this;
+    }
+
+    public void setPictures(byte[] pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getPicturesContentType() {
+        return picturesContentType;
+    }
+
+    public Place picturesContentType(String picturesContentType) {
+        this.picturesContentType = picturesContentType;
+        return this;
+    }
+
+    public void setPicturesContentType(String picturesContentType) {
+        this.picturesContentType = picturesContentType;
+    }
+
+    public String getFacilities() {
+        return facilities;
+    }
+
+    public Place facilities(String facilities) {
+        this.facilities = facilities;
+        return this;
+    }
+
+    public void setFacilities(String facilities) {
+        this.facilities = facilities;
+    }
+
     public Set<Activity> getActivityPlaces() {
         return activityPlaces;
     }
@@ -269,6 +318,9 @@ public class Place implements Serializable {
             ", name='" + getName() + "'" +
             ", pricePerHour=" + getPricePerHour() +
             ", contactForm='" + getContactForm() + "'" +
+            ", pictures='" + getPictures() + "'" +
+            ", picturesContentType='" + getPicturesContentType() + "'" +
+            ", facilities='" + getFacilities() + "'" +
             "}";
     }
 }

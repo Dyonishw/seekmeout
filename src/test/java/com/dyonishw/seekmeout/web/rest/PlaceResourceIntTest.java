@@ -30,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -78,6 +79,14 @@ public class PlaceResourceIntTest {
 
     private static final String DEFAULT_CONTACT_FORM = "AAAAAAAAAA";
     private static final String UPDATED_CONTACT_FORM = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_PICTURES = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_PICTURES = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_PICTURES_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_PICTURES_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_FACILITIES = "AAAAAAAAAA";
+    private static final String UPDATED_FACILITIES = "BBBBBBBBBB";
 
     @Autowired
     private PlaceRepository placeRepository;
@@ -151,7 +160,10 @@ public class PlaceResourceIntTest {
             .openHours(DEFAULT_OPEN_HOURS)
             .name(DEFAULT_NAME)
             .pricePerHour(DEFAULT_PRICE_PER_HOUR)
-            .contactForm(DEFAULT_CONTACT_FORM);
+            .contactForm(DEFAULT_CONTACT_FORM)
+            .pictures(DEFAULT_PICTURES)
+            .picturesContentType(DEFAULT_PICTURES_CONTENT_TYPE)
+            .facilities(DEFAULT_FACILITIES);
         return place;
     }
 
@@ -184,6 +196,9 @@ public class PlaceResourceIntTest {
         assertThat(testPlace.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testPlace.getPricePerHour()).isEqualTo(DEFAULT_PRICE_PER_HOUR);
         assertThat(testPlace.getContactForm()).isEqualTo(DEFAULT_CONTACT_FORM);
+        assertThat(testPlace.getPictures()).isEqualTo(DEFAULT_PICTURES);
+        assertThat(testPlace.getPicturesContentType()).isEqualTo(DEFAULT_PICTURES_CONTENT_TYPE);
+        assertThat(testPlace.getFacilities()).isEqualTo(DEFAULT_FACILITIES);
 
         // Validate the Place in Elasticsearch
         verify(mockPlaceSearchRepository, times(1)).save(testPlace);
@@ -344,7 +359,10 @@ public class PlaceResourceIntTest {
             .andExpect(jsonPath("$.[*].openHours").value(hasItem(DEFAULT_OPEN_HOURS.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].pricePerHour").value(hasItem(DEFAULT_PRICE_PER_HOUR)))
-            .andExpect(jsonPath("$.[*].contactForm").value(hasItem(DEFAULT_CONTACT_FORM.toString())));
+            .andExpect(jsonPath("$.[*].contactForm").value(hasItem(DEFAULT_CONTACT_FORM.toString())))
+            .andExpect(jsonPath("$.[*].picturesContentType").value(hasItem(DEFAULT_PICTURES_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].pictures").value(hasItem(Base64Utils.encodeToString(DEFAULT_PICTURES))))
+            .andExpect(jsonPath("$.[*].facilities").value(hasItem(DEFAULT_FACILITIES.toString())));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -398,7 +416,10 @@ public class PlaceResourceIntTest {
             .andExpect(jsonPath("$.openHours").value(DEFAULT_OPEN_HOURS.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.pricePerHour").value(DEFAULT_PRICE_PER_HOUR))
-            .andExpect(jsonPath("$.contactForm").value(DEFAULT_CONTACT_FORM.toString()));
+            .andExpect(jsonPath("$.contactForm").value(DEFAULT_CONTACT_FORM.toString()))
+            .andExpect(jsonPath("$.picturesContentType").value(DEFAULT_PICTURES_CONTENT_TYPE))
+            .andExpect(jsonPath("$.pictures").value(Base64Utils.encodeToString(DEFAULT_PICTURES)))
+            .andExpect(jsonPath("$.facilities").value(DEFAULT_FACILITIES.toString()));
     }
 
     @Test
@@ -742,6 +763,45 @@ public class PlaceResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllPlacesByFacilitiesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        placeRepository.saveAndFlush(place);
+
+        // Get all the placeList where facilities equals to DEFAULT_FACILITIES
+        defaultPlaceShouldBeFound("facilities.equals=" + DEFAULT_FACILITIES);
+
+        // Get all the placeList where facilities equals to UPDATED_FACILITIES
+        defaultPlaceShouldNotBeFound("facilities.equals=" + UPDATED_FACILITIES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlacesByFacilitiesIsInShouldWork() throws Exception {
+        // Initialize the database
+        placeRepository.saveAndFlush(place);
+
+        // Get all the placeList where facilities in DEFAULT_FACILITIES or UPDATED_FACILITIES
+        defaultPlaceShouldBeFound("facilities.in=" + DEFAULT_FACILITIES + "," + UPDATED_FACILITIES);
+
+        // Get all the placeList where facilities equals to UPDATED_FACILITIES
+        defaultPlaceShouldNotBeFound("facilities.in=" + UPDATED_FACILITIES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlacesByFacilitiesIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        placeRepository.saveAndFlush(place);
+
+        // Get all the placeList where facilities is not null
+        defaultPlaceShouldBeFound("facilities.specified=true");
+
+        // Get all the placeList where facilities is null
+        defaultPlaceShouldNotBeFound("facilities.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllPlacesByActivityPlaceIsEqualToSomething() throws Exception {
         // Initialize the database
         Activity activityPlace = ActivityResourceIntTest.createEntity(em);
@@ -792,7 +852,10 @@ public class PlaceResourceIntTest {
             .andExpect(jsonPath("$.[*].openHours").value(hasItem(DEFAULT_OPEN_HOURS)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].pricePerHour").value(hasItem(DEFAULT_PRICE_PER_HOUR)))
-            .andExpect(jsonPath("$.[*].contactForm").value(hasItem(DEFAULT_CONTACT_FORM)));
+            .andExpect(jsonPath("$.[*].contactForm").value(hasItem(DEFAULT_CONTACT_FORM)))
+            .andExpect(jsonPath("$.[*].picturesContentType").value(hasItem(DEFAULT_PICTURES_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].pictures").value(hasItem(Base64Utils.encodeToString(DEFAULT_PICTURES))))
+            .andExpect(jsonPath("$.[*].facilities").value(hasItem(DEFAULT_FACILITIES)));
 
         // Check, that the count call also returns 1
         restPlaceMockMvc.perform(get("/api/places/count?sort=id,desc&" + filter))
@@ -847,7 +910,10 @@ public class PlaceResourceIntTest {
             .openHours(UPDATED_OPEN_HOURS)
             .name(UPDATED_NAME)
             .pricePerHour(UPDATED_PRICE_PER_HOUR)
-            .contactForm(UPDATED_CONTACT_FORM);
+            .contactForm(UPDATED_CONTACT_FORM)
+            .pictures(UPDATED_PICTURES)
+            .picturesContentType(UPDATED_PICTURES_CONTENT_TYPE)
+            .facilities(UPDATED_FACILITIES);
         PlaceDTO placeDTO = placeMapper.toDto(updatedPlace);
 
         restPlaceMockMvc.perform(put("/api/places")
@@ -867,6 +933,9 @@ public class PlaceResourceIntTest {
         assertThat(testPlace.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testPlace.getPricePerHour()).isEqualTo(UPDATED_PRICE_PER_HOUR);
         assertThat(testPlace.getContactForm()).isEqualTo(UPDATED_CONTACT_FORM);
+        assertThat(testPlace.getPictures()).isEqualTo(UPDATED_PICTURES);
+        assertThat(testPlace.getPicturesContentType()).isEqualTo(UPDATED_PICTURES_CONTENT_TYPE);
+        assertThat(testPlace.getFacilities()).isEqualTo(UPDATED_FACILITIES);
 
         // Validate the Place in Elasticsearch
         verify(mockPlaceSearchRepository, times(1)).save(testPlace);
@@ -934,7 +1003,10 @@ public class PlaceResourceIntTest {
             .andExpect(jsonPath("$.[*].openHours").value(hasItem(DEFAULT_OPEN_HOURS)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].pricePerHour").value(hasItem(DEFAULT_PRICE_PER_HOUR)))
-            .andExpect(jsonPath("$.[*].contactForm").value(hasItem(DEFAULT_CONTACT_FORM)));
+            .andExpect(jsonPath("$.[*].contactForm").value(hasItem(DEFAULT_CONTACT_FORM)))
+            .andExpect(jsonPath("$.[*].picturesContentType").value(hasItem(DEFAULT_PICTURES_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].pictures").value(hasItem(Base64Utils.encodeToString(DEFAULT_PICTURES))))
+            .andExpect(jsonPath("$.[*].facilities").value(hasItem(DEFAULT_FACILITIES)));
     }
 
     @Test

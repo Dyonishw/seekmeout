@@ -9,13 +9,15 @@
             "relationshipValidateRules": [],
             "otherEntityField": "type",
             "ownerSide": true,
-            "otherEntityRelationshipName": "activityPlace"
+            "otherEntityRelationshipName": "activityPlace",
+            "otherEntityRelationshipNameUndefined": false
         },
         {
             "relationshipName": "placeEvent",
             "otherEntityName": "event",
             "relationshipType": "one-to-many",
-            "otherEntityRelationshipName": "placeEvent"
+            "otherEntityRelationshipName": "placeEvent",
+            "otherEntityRelationshipNameUndefined": false
         }
     ],
     "fields": [
@@ -76,6 +78,15 @@
         },
         {
             "fieldName": "contactForm",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pictures",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "facilities",
             "fieldType": "String"
         }
     ],

@@ -64,6 +64,12 @@ export class ActivityDetail extends React.Component<IActivityDetailProps> {
               </span>
             </dt>
             <dd>{activityEntity.recommendedGear}</dd>
+            <dt>
+              <span id="longDescription">
+                <Translate contentKey="seekMeOutApp.activity.longDescription">Long Description</Translate>
+              </span>
+            </dt>
+            <dd>{activityEntity.longDescription}</dd>
           </dl>
           <Button tag={Link} to="/entity/activity" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}

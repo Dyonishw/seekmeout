@@ -80,6 +80,8 @@ class PlaceGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "pricePerHour":"0"
                 , "contactForm":"SAMPLE_TEXT"
+                , "pictures":null
+                , "facilities":"SAMPLE_TEXT"
                 }""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_place_url"))).exitHereIfFailed

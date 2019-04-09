@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the Place entity.
@@ -36,6 +37,12 @@ public class PlaceDTO implements Serializable {
     private Integer pricePerHour;
 
     private String contactForm;
+
+    @Lob
+    private byte[] pictures;
+
+    private String picturesContentType;
+    private String facilities;
 
 
     private Set<ActivityDTO> activityPlaces = new HashSet<>();
@@ -112,6 +119,30 @@ public class PlaceDTO implements Serializable {
         this.contactForm = contactForm;
     }
 
+    public byte[] getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(byte[] pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getPicturesContentType() {
+        return picturesContentType;
+    }
+
+    public void setPicturesContentType(String picturesContentType) {
+        this.picturesContentType = picturesContentType;
+    }
+
+    public String getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(String facilities) {
+        this.facilities = facilities;
+    }
+
     public Set<ActivityDTO> getActivityPlaces() {
         return activityPlaces;
     }
@@ -153,6 +184,8 @@ public class PlaceDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", pricePerHour=" + getPricePerHour() +
             ", contactForm='" + getContactForm() + "'" +
+            ", pictures='" + getPictures() + "'" +
+            ", facilities='" + getFacilities() + "'" +
             "}";
     }
 }

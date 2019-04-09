@@ -52,6 +52,9 @@ public class Activity implements Serializable {
     @Column(name = "recommended_gear")
     private String recommendedGear;
 
+    @Column(name = "long_description")
+    private String longDescription;
+
     @ManyToMany(mappedBy = "activityPlaces")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonIgnore
@@ -147,6 +150,19 @@ public class Activity implements Serializable {
         this.recommendedGear = recommendedGear;
     }
 
+    public String getLongDescription() {
+        return longDescription;
+    }
+
+    public Activity longDescription(String longDescription) {
+        this.longDescription = longDescription;
+        return this;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
     public Set<Place> getActivityPlaces() {
         return activityPlaces;
     }
@@ -228,6 +244,7 @@ public class Activity implements Serializable {
             ", officialRules='" + getOfficialRules() + "'" +
             ", shortDescription='" + getShortDescription() + "'" +
             ", recommendedGear='" + getRecommendedGear() + "'" +
+            ", longDescription='" + getLongDescription() + "'" +
             "}";
     }
 }

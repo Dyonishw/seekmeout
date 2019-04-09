@@ -78,6 +78,7 @@ class ActivityGatlingTest extends Simulation {
                 , "officialRules":"SAMPLE_TEXT"
                 , "shortDescription":"SAMPLE_TEXT"
                 , "recommendedGear":"SAMPLE_TEXT"
+                , "longDescription":"SAMPLE_TEXT"
                 }""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_activity_url"))).exitHereIfFailed

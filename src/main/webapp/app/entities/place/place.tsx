@@ -5,6 +5,8 @@ import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import {
+  openFile,
+  byteSize,
   Translate,
   translate,
   ICrudSearchAction,
@@ -148,6 +150,12 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                 <th className="hand" onClick={this.sort('contactForm')}>
                   <Translate contentKey="seekMeOutApp.place.contactForm">Contact Form</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={this.sort('pictures')}>
+                  <Translate contentKey="seekMeOutApp.place.pictures">Pictures</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('facilities')}>
+                  <Translate contentKey="seekMeOutApp.place.facilities">Facilities</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -167,6 +175,20 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                   <td>{place.name}</td>
                   <td>{place.pricePerHour}</td>
                   <td>{place.contactForm}</td>
+                  <td>
+                    {place.pictures ? (
+                      <div>
+                        <a onClick={openFile(place.picturesContentType, place.pictures)}>
+                          <img src={`data:${place.picturesContentType};base64,${place.pictures}`} style={{ maxHeight: '30px' }} />
+                          &nbsp;
+                        </a>
+                        <span>
+                          {place.picturesContentType}, {byteSize(place.pictures)}
+                        </span>
+                      </div>
+                    ) : null}
+                  </td>
+                  <td>{place.facilities}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${place.id}`} color="info" size="sm">

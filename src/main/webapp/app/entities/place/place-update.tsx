@@ -4,13 +4,13 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IActivity } from 'app/shared/model/activity.model';
 import { getEntities as getActivities } from 'app/entities/activity/activity.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './place.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './place.reducer';
 import { IPlace } from 'app/shared/model/place.model';
 // tslint:disable-next-line:no-unused-variable
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -48,6 +48,14 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
     this.props.getActivities();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event, errors, values) => {
     if (errors.length === 0) {
       const { placeEntity } = this.props;
@@ -72,6 +80,8 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
   render() {
     const { placeEntity, activities, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { pictures, picturesContentType } = placeEntity;
 
     return (
       <div>
@@ -193,6 +203,42 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
                   <AvField id="place-contactForm" type="text" name="contactForm" />
                 </AvGroup>
                 <AvGroup>
+                  <AvGroup>
+                    <Label id="picturesLabel" for="pictures">
+                      <Translate contentKey="seekMeOutApp.place.pictures">Pictures</Translate>
+                    </Label>
+                    <br />
+                    {pictures ? (
+                      <div>
+                        <a onClick={openFile(picturesContentType, pictures)}>
+                          <img src={`data:${picturesContentType};base64,${pictures}`} style={{ maxHeight: '100px' }} />
+                        </a>
+                        <br />
+                        <Row>
+                          <Col md="11">
+                            <span>
+                              {picturesContentType}, {byteSize(pictures)}
+                            </span>
+                          </Col>
+                          <Col md="1">
+                            <Button color="danger" onClick={this.clearBlob('pictures')}>
+                              <FontAwesomeIcon icon="times-circle" />
+                            </Button>
+                          </Col>
+                        </Row>
+                      </div>
+                    ) : null}
+                    <input id="file_pictures" type="file" onChange={this.onBlobChange(true, 'pictures')} accept="image/*" />
+                    <AvInput type="hidden" name="pictures" value={pictures} />
+                  </AvGroup>
+                </AvGroup>
+                <AvGroup>
+                  <Label id="facilitiesLabel" for="facilities">
+                    <Translate contentKey="seekMeOutApp.place.facilities">Facilities</Translate>
+                  </Label>
+                  <AvField id="place-facilities" type="text" name="facilities" />
+                </AvGroup>
+                <AvGroup>
                   <Label for="activities">
                     <Translate contentKey="seekMeOutApp.place.activityPlace">Activity Place</Translate>
                   </Label>
@@ -246,6 +292,7 @@ const mapDispatchToProps = {
   getActivities,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

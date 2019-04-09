@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 // tslint:disable-next-line:no-unused-variable
-import { Translate, ICrudGetAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, openFile, byteSize } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -76,6 +76,29 @@ export class PlaceDetail extends React.Component<IPlaceDetailProps> {
               </span>
             </dt>
             <dd>{placeEntity.contactForm}</dd>
+            <dt>
+              <span id="pictures">
+                <Translate contentKey="seekMeOutApp.place.pictures">Pictures</Translate>
+              </span>
+            </dt>
+            <dd>
+              {placeEntity.pictures ? (
+                <div>
+                  <a onClick={openFile(placeEntity.picturesContentType, placeEntity.pictures)}>
+                    <img src={`data:${placeEntity.picturesContentType};base64,${placeEntity.pictures}`} style={{ maxHeight: '30px' }} />
+                  </a>
+                  <span>
+                    {placeEntity.picturesContentType}, {byteSize(placeEntity.pictures)}
+                  </span>
+                </div>
+              ) : null}
+            </dd>
+            <dt>
+              <span id="facilities">
+                <Translate contentKey="seekMeOutApp.place.facilities">Facilities</Translate>
+              </span>
+            </dt>
+            <dd>{placeEntity.facilities}</dd>
             <dt>
               <Translate contentKey="seekMeOutApp.place.activityPlace">Activity Place</Translate>
             </dt>

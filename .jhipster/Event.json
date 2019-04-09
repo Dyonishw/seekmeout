@@ -6,13 +6,17 @@
             "relationshipName": "activityEvent",
             "otherEntityName": "activity",
             "relationshipType": "many-to-one",
-            "otherEntityField": "type"
+            "otherEntityField": "type",
+            "otherEntityRelationshipNameUndefined": true,
+            "otherEntityRelationshipName": "event"
         },
         {
             "relationshipName": "placeEvent",
             "otherEntityName": "place",
             "relationshipType": "many-to-one",
-            "otherEntityField": "name"
+            "otherEntityField": "name",
+            "otherEntityRelationshipNameUndefined": true,
+            "otherEntityRelationshipName": "event"
         }
     ],
     "fields": [

@@ -11,6 +11,9 @@ export interface IPlace {
   name?: string;
   pricePerHour?: number;
   contactForm?: string;
+  picturesContentType?: string;
+  pictures?: any;
+  facilities?: string;
   activityPlaces?: IActivity[];
   placeEvents?: IEvent[];
 }

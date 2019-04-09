@@ -40,6 +40,8 @@ public class PlaceCriteria implements Serializable {
 
     private StringFilter contactForm;
 
+    private StringFilter facilities;
+
     private LongFilter activityPlaceId;
 
     private LongFilter placeEventId;
@@ -116,6 +118,14 @@ public class PlaceCriteria implements Serializable {
         this.contactForm = contactForm;
     }
 
+    public StringFilter getFacilities() {
+        return facilities;
+    }
+
+    public void setFacilities(StringFilter facilities) {
+        this.facilities = facilities;
+    }
+
     public LongFilter getActivityPlaceId() {
         return activityPlaceId;
     }
@@ -152,6 +162,7 @@ public class PlaceCriteria implements Serializable {
             Objects.equals(name, that.name) &&
             Objects.equals(pricePerHour, that.pricePerHour) &&
             Objects.equals(contactForm, that.contactForm) &&
+            Objects.equals(facilities, that.facilities) &&
             Objects.equals(activityPlaceId, that.activityPlaceId) &&
             Objects.equals(placeEventId, that.placeEventId);
     }
@@ -168,6 +179,7 @@ public class PlaceCriteria implements Serializable {
         name,
         pricePerHour,
         contactForm,
+        facilities,
         activityPlaceId,
         placeEventId
         );
@@ -185,6 +197,7 @@ public class PlaceCriteria implements Serializable {
                 (name != null ? "name=" + name + ", " : "") +
                 (pricePerHour != null ? "pricePerHour=" + pricePerHour + ", " : "") +
                 (contactForm != null ? "contactForm=" + contactForm + ", " : "") +
+                (facilities != null ? "facilities=" + facilities + ", " : "") +
                 (activityPlaceId != null ? "activityPlaceId=" + activityPlaceId + ", " : "") +
                 (placeEventId != null ? "placeEventId=" + placeEventId + ", " : "") +
             "}";

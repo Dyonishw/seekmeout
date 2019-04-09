@@ -71,6 +71,9 @@ public class ActivityResourceIntTest {
     private static final String DEFAULT_RECOMMENDED_GEAR = "AAAAAAAAAA";
     private static final String UPDATED_RECOMMENDED_GEAR = "BBBBBBBBBB";
 
+    private static final String DEFAULT_LONG_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_LONG_DESCRIPTION = "BBBBBBBBBB";
+
     @Autowired
     private ActivityRepository activityRepository;
 
@@ -135,7 +138,8 @@ public class ActivityResourceIntTest {
             .officialDuration(DEFAULT_OFFICIAL_DURATION)
             .officialRules(DEFAULT_OFFICIAL_RULES)
             .shortDescription(DEFAULT_SHORT_DESCRIPTION)
-            .recommendedGear(DEFAULT_RECOMMENDED_GEAR);
+            .recommendedGear(DEFAULT_RECOMMENDED_GEAR)
+            .longDescription(DEFAULT_LONG_DESCRIPTION);
         return activity;
     }
 
@@ -166,6 +170,7 @@ public class ActivityResourceIntTest {
         assertThat(testActivity.getOfficialRules()).isEqualTo(DEFAULT_OFFICIAL_RULES);
         assertThat(testActivity.getShortDescription()).isEqualTo(DEFAULT_SHORT_DESCRIPTION);
         assertThat(testActivity.getRecommendedGear()).isEqualTo(DEFAULT_RECOMMENDED_GEAR);
+        assertThat(testActivity.getLongDescription()).isEqualTo(DEFAULT_LONG_DESCRIPTION);
 
         // Validate the Activity in Elasticsearch
         verify(mockActivitySearchRepository, times(1)).save(testActivity);
@@ -248,7 +253,8 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].officialDuration").value(hasItem(DEFAULT_OFFICIAL_DURATION.toString())))
             .andExpect(jsonPath("$.[*].officialRules").value(hasItem(DEFAULT_OFFICIAL_RULES.toString())))
             .andExpect(jsonPath("$.[*].shortDescription").value(hasItem(DEFAULT_SHORT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].recommendedGear").value(hasItem(DEFAULT_RECOMMENDED_GEAR.toString())));
+            .andExpect(jsonPath("$.[*].recommendedGear").value(hasItem(DEFAULT_RECOMMENDED_GEAR.toString())))
+            .andExpect(jsonPath("$.[*].longDescription").value(hasItem(DEFAULT_LONG_DESCRIPTION.toString())));
     }
     
     @Test
@@ -267,7 +273,8 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.officialDuration").value(DEFAULT_OFFICIAL_DURATION.toString()))
             .andExpect(jsonPath("$.officialRules").value(DEFAULT_OFFICIAL_RULES.toString()))
             .andExpect(jsonPath("$.shortDescription").value(DEFAULT_SHORT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.recommendedGear").value(DEFAULT_RECOMMENDED_GEAR.toString()));
+            .andExpect(jsonPath("$.recommendedGear").value(DEFAULT_RECOMMENDED_GEAR.toString()))
+            .andExpect(jsonPath("$.longDescription").value(DEFAULT_LONG_DESCRIPTION.toString()));
     }
 
     @Test
@@ -533,6 +540,45 @@ public class ActivityResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllActivitiesByLongDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        activityRepository.saveAndFlush(activity);
+
+        // Get all the activityList where longDescription equals to DEFAULT_LONG_DESCRIPTION
+        defaultActivityShouldBeFound("longDescription.equals=" + DEFAULT_LONG_DESCRIPTION);
+
+        // Get all the activityList where longDescription equals to UPDATED_LONG_DESCRIPTION
+        defaultActivityShouldNotBeFound("longDescription.equals=" + UPDATED_LONG_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllActivitiesByLongDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        activityRepository.saveAndFlush(activity);
+
+        // Get all the activityList where longDescription in DEFAULT_LONG_DESCRIPTION or UPDATED_LONG_DESCRIPTION
+        defaultActivityShouldBeFound("longDescription.in=" + DEFAULT_LONG_DESCRIPTION + "," + UPDATED_LONG_DESCRIPTION);
+
+        // Get all the activityList where longDescription equals to UPDATED_LONG_DESCRIPTION
+        defaultActivityShouldNotBeFound("longDescription.in=" + UPDATED_LONG_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllActivitiesByLongDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        activityRepository.saveAndFlush(activity);
+
+        // Get all the activityList where longDescription is not null
+        defaultActivityShouldBeFound("longDescription.specified=true");
+
+        // Get all the activityList where longDescription is null
+        defaultActivityShouldNotBeFound("longDescription.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllActivitiesByActivityPlaceIsEqualToSomething() throws Exception {
         // Initialize the database
         Place activityPlace = PlaceResourceIntTest.createEntity(em);
@@ -581,7 +627,8 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].officialDuration").value(hasItem(DEFAULT_OFFICIAL_DURATION)))
             .andExpect(jsonPath("$.[*].officialRules").value(hasItem(DEFAULT_OFFICIAL_RULES)))
             .andExpect(jsonPath("$.[*].shortDescription").value(hasItem(DEFAULT_SHORT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].recommendedGear").value(hasItem(DEFAULT_RECOMMENDED_GEAR)));
+            .andExpect(jsonPath("$.[*].recommendedGear").value(hasItem(DEFAULT_RECOMMENDED_GEAR)))
+            .andExpect(jsonPath("$.[*].longDescription").value(hasItem(DEFAULT_LONG_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restActivityMockMvc.perform(get("/api/activities/count?sort=id,desc&" + filter))
@@ -634,7 +681,8 @@ public class ActivityResourceIntTest {
             .officialDuration(UPDATED_OFFICIAL_DURATION)
             .officialRules(UPDATED_OFFICIAL_RULES)
             .shortDescription(UPDATED_SHORT_DESCRIPTION)
-            .recommendedGear(UPDATED_RECOMMENDED_GEAR);
+            .recommendedGear(UPDATED_RECOMMENDED_GEAR)
+            .longDescription(UPDATED_LONG_DESCRIPTION);
         ActivityDTO activityDTO = activityMapper.toDto(updatedActivity);
 
         restActivityMockMvc.perform(put("/api/activities")
@@ -652,6 +700,7 @@ public class ActivityResourceIntTest {
         assertThat(testActivity.getOfficialRules()).isEqualTo(UPDATED_OFFICIAL_RULES);
         assertThat(testActivity.getShortDescription()).isEqualTo(UPDATED_SHORT_DESCRIPTION);
         assertThat(testActivity.getRecommendedGear()).isEqualTo(UPDATED_RECOMMENDED_GEAR);
+        assertThat(testActivity.getLongDescription()).isEqualTo(UPDATED_LONG_DESCRIPTION);
 
         // Validate the Activity in Elasticsearch
         verify(mockActivitySearchRepository, times(1)).save(testActivity);
@@ -717,7 +766,8 @@ public class ActivityResourceIntTest {
             .andExpect(jsonPath("$.[*].officialDuration").value(hasItem(DEFAULT_OFFICIAL_DURATION)))
             .andExpect(jsonPath("$.[*].officialRules").value(hasItem(DEFAULT_OFFICIAL_RULES)))
             .andExpect(jsonPath("$.[*].shortDescription").value(hasItem(DEFAULT_SHORT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].recommendedGear").value(hasItem(DEFAULT_RECOMMENDED_GEAR)));
+            .andExpect(jsonPath("$.[*].recommendedGear").value(hasItem(DEFAULT_RECOMMENDED_GEAR)))
+            .andExpect(jsonPath("$.[*].longDescription").value(hasItem(DEFAULT_LONG_DESCRIPTION)));
     }
 
     @Test

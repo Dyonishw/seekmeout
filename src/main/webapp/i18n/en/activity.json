@@ -22,6 +22,7 @@
       "officialRules": "Official Rules",
       "shortDescription": "Short Description",
       "recommendedGear": "Recommended Gear",
+      "longDescription": "Long Description",
       "activityPlace": "Activity Place",
       "activityEvent": "Activity Event"
     }

@@ -144,6 +144,9 @@ export class Activity extends React.Component<IActivityProps, IActivityState> {
                 <th className="hand" onClick={this.sort('recommendedGear')}>
                   <Translate contentKey="seekMeOutApp.activity.recommendedGear">Recommended Gear</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={this.sort('longDescription')}>
+                  <Translate contentKey="seekMeOutApp.activity.longDescription">Long Description</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -161,6 +164,7 @@ export class Activity extends React.Component<IActivityProps, IActivityState> {
                   <td>{activity.officialRules}</td>
                   <td>{activity.shortDescription}</td>
                   <td>{activity.recommendedGear}</td>
+                  <td>{activity.longDescription}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${activity.id}`} color="info" size="sm">

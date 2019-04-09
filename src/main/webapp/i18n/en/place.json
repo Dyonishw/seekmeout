@@ -24,6 +24,8 @@
       "name": "Name",
       "pricePerHour": "Price Per Hour",
       "contactForm": "Contact Form",
+      "pictures": "Pictures",
+      "facilities": "Facilities",
       "activityPlace": "Activity Place",
       "placeEvent": "Place Event"
     }

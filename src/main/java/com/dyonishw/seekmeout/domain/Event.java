@@ -47,10 +47,11 @@ public class Event implements Serializable {
     private LocalDate hour;
 
     @ManyToOne
+    @JsonIgnoreProperties("events")
     private Activity activityEvent;
 
     @ManyToOne
-    @JsonIgnoreProperties("placeEvents")
+    @JsonIgnoreProperties("events")
     private Place placeEvent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

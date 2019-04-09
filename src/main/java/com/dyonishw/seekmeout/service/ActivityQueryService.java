@@ -111,6 +111,9 @@ public class ActivityQueryService extends QueryService<Activity> {
             if (criteria.getRecommendedGear() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRecommendedGear(), Activity_.recommendedGear));
             }
+            if (criteria.getLongDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLongDescription(), Activity_.longDescription));
+            }
             if (criteria.getActivityPlaceId() != null) {
                 specification = specification.and(buildSpecification(criteria.getActivityPlaceId(),
                     root -> root.join(Activity_.activityPlaces, JoinType.LEFT).get(Place_.id)));

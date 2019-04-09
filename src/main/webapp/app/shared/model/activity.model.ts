@@ -9,6 +9,7 @@ export interface IActivity {
   officialRules?: string;
   shortDescription?: string;
   recommendedGear?: string;
+  longDescription?: string;
   activityPlaces?: IPlace[];
   activityEvents?: IEvent[];
 }

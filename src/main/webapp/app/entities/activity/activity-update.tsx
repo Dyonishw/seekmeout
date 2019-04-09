@@ -155,6 +155,12 @@ export class ActivityUpdate extends React.Component<IActivityUpdateProps, IActiv
                   </Label>
                   <AvField id="activity-recommendedGear" type="text" name="recommendedGear" />
                 </AvGroup>
+                <AvGroup>
+                  <Label id="longDescriptionLabel" for="longDescription">
+                    <Translate contentKey="seekMeOutApp.activity.longDescription">Long Description</Translate>
+                  </Label>
+                  <AvField id="activity-longDescription" type="text" name="longDescription" />
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/activity" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
                   <span className="d-none d-md-inline">
