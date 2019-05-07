@@ -59,9 +59,6 @@ public class PlaceResourceIntTest {
     private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
     private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
-    private static final String DEFAULT_POSSIBLE_ACTIVITIES = "AAAAAAAAAA";
-    private static final String UPDATED_POSSIBLE_ACTIVITIES = "BBBBBBBBBB";
-
     private static final String DEFAULT_PHONE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PHONE_NUMBER = "BBBBBBBBBB";
 
@@ -154,7 +151,6 @@ public class PlaceResourceIntTest {
     public static Place createEntity(EntityManager em) {
         Place place = new Place()
             .address(DEFAULT_ADDRESS)
-            .possibleActivities(DEFAULT_POSSIBLE_ACTIVITIES)
             .phoneNumber(DEFAULT_PHONE_NUMBER)
             .description(DEFAULT_DESCRIPTION)
             .openHours(DEFAULT_OPEN_HOURS)
@@ -189,7 +185,6 @@ public class PlaceResourceIntTest {
         assertThat(placeList).hasSize(databaseSizeBeforeCreate + 1);
         Place testPlace = placeList.get(placeList.size() - 1);
         assertThat(testPlace.getAddress()).isEqualTo(DEFAULT_ADDRESS);
-        assertThat(testPlace.getPossibleActivities()).isEqualTo(DEFAULT_POSSIBLE_ACTIVITIES);
         assertThat(testPlace.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
         assertThat(testPlace.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testPlace.getOpenHours()).isEqualTo(DEFAULT_OPEN_HOURS);
@@ -353,7 +348,6 @@ public class PlaceResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(place.getId().intValue())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
-            .andExpect(jsonPath("$.[*].possibleActivities").value(hasItem(DEFAULT_POSSIBLE_ACTIVITIES.toString())))
             .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].openHours").value(hasItem(DEFAULT_OPEN_HOURS.toString())))
@@ -410,7 +404,6 @@ public class PlaceResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(place.getId().intValue()))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS.toString()))
-            .andExpect(jsonPath("$.possibleActivities").value(DEFAULT_POSSIBLE_ACTIVITIES.toString()))
             .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.openHours").value(DEFAULT_OPEN_HOURS.toString()))
@@ -459,45 +452,6 @@ public class PlaceResourceIntTest {
 
         // Get all the placeList where address is null
         defaultPlaceShouldNotBeFound("address.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlacesByPossibleActivitiesIsEqualToSomething() throws Exception {
-        // Initialize the database
-        placeRepository.saveAndFlush(place);
-
-        // Get all the placeList where possibleActivities equals to DEFAULT_POSSIBLE_ACTIVITIES
-        defaultPlaceShouldBeFound("possibleActivities.equals=" + DEFAULT_POSSIBLE_ACTIVITIES);
-
-        // Get all the placeList where possibleActivities equals to UPDATED_POSSIBLE_ACTIVITIES
-        defaultPlaceShouldNotBeFound("possibleActivities.equals=" + UPDATED_POSSIBLE_ACTIVITIES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlacesByPossibleActivitiesIsInShouldWork() throws Exception {
-        // Initialize the database
-        placeRepository.saveAndFlush(place);
-
-        // Get all the placeList where possibleActivities in DEFAULT_POSSIBLE_ACTIVITIES or UPDATED_POSSIBLE_ACTIVITIES
-        defaultPlaceShouldBeFound("possibleActivities.in=" + DEFAULT_POSSIBLE_ACTIVITIES + "," + UPDATED_POSSIBLE_ACTIVITIES);
-
-        // Get all the placeList where possibleActivities equals to UPDATED_POSSIBLE_ACTIVITIES
-        defaultPlaceShouldNotBeFound("possibleActivities.in=" + UPDATED_POSSIBLE_ACTIVITIES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlacesByPossibleActivitiesIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        placeRepository.saveAndFlush(place);
-
-        // Get all the placeList where possibleActivities is not null
-        defaultPlaceShouldBeFound("possibleActivities.specified=true");
-
-        // Get all the placeList where possibleActivities is null
-        defaultPlaceShouldNotBeFound("possibleActivities.specified=false");
     }
 
     @Test
@@ -846,7 +800,6 @@ public class PlaceResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(place.getId().intValue())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].possibleActivities").value(hasItem(DEFAULT_POSSIBLE_ACTIVITIES)))
             .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].openHours").value(hasItem(DEFAULT_OPEN_HOURS)))
@@ -904,7 +857,6 @@ public class PlaceResourceIntTest {
         em.detach(updatedPlace);
         updatedPlace
             .address(UPDATED_ADDRESS)
-            .possibleActivities(UPDATED_POSSIBLE_ACTIVITIES)
             .phoneNumber(UPDATED_PHONE_NUMBER)
             .description(UPDATED_DESCRIPTION)
             .openHours(UPDATED_OPEN_HOURS)
@@ -926,7 +878,6 @@ public class PlaceResourceIntTest {
         assertThat(placeList).hasSize(databaseSizeBeforeUpdate);
         Place testPlace = placeList.get(placeList.size() - 1);
         assertThat(testPlace.getAddress()).isEqualTo(UPDATED_ADDRESS);
-        assertThat(testPlace.getPossibleActivities()).isEqualTo(UPDATED_POSSIBLE_ACTIVITIES);
         assertThat(testPlace.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
         assertThat(testPlace.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testPlace.getOpenHours()).isEqualTo(UPDATED_OPEN_HOURS);
@@ -997,7 +948,6 @@ public class PlaceResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(place.getId().intValue())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
-            .andExpect(jsonPath("$.[*].possibleActivities").value(hasItem(DEFAULT_POSSIBLE_ACTIVITIES)))
             .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].openHours").value(hasItem(DEFAULT_OPEN_HOURS)))

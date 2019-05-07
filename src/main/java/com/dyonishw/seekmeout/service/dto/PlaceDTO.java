@@ -16,8 +16,6 @@ public class PlaceDTO implements Serializable {
     @NotNull
     private String address;
 
-    private String possibleActivities;
-
     @NotNull
     private String phoneNumber;
 
@@ -61,14 +59,6 @@ public class PlaceDTO implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPossibleActivities() {
-        return possibleActivities;
-    }
-
-    public void setPossibleActivities(String possibleActivities) {
-        this.possibleActivities = possibleActivities;
     }
 
     public String getPhoneNumber() {
@@ -177,7 +167,6 @@ public class PlaceDTO implements Serializable {
         return "PlaceDTO{" +
             "id=" + getId() +
             ", address='" + getAddress() + "'" +
-            ", possibleActivities='" + getPossibleActivities() + "'" +
             ", phoneNumber='" + getPhoneNumber() + "'" +
             ", description='" + getDescription() + "'" +
             ", openHours='" + getOpenHours() + "'" +

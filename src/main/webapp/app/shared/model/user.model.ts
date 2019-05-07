@@ -14,9 +14,13 @@ export interface IUser {
   password?: string;
 }
 
+export interface ICurrentUser {
+  currentUser?: IUser;
+}
+
 export const defaultValue: Readonly<IUser> = {
   id: '',
-  login: '',
+  login: 'asd',
   firstName: '',
   lastName: '',
   email: '',
@@ -28,4 +32,7 @@ export const defaultValue: Readonly<IUser> = {
   lastModifiedBy: '',
   lastModifiedDate: null,
   password: ''
+};
+export const defaultCurrentUser: Readonly<ICurrentUser> = {
+  currentUser: defaultValue;
 };

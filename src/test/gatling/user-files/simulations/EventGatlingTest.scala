@@ -72,11 +72,9 @@ class EventGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "activityType":"SAMPLE_TEXT"
-                , "takingPlaceAt":"SAMPLE_TEXT"
-                , "peopleAttending":"SAMPLE_TEXT"
                 , "casual":null
                 , "hour":"2020-01-01T00:00:00.000Z"
+                , "casualDescription":"SAMPLE_TEXT"
                 }""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_event_url"))).exitHereIfFailed

@@ -4,6 +4,9 @@ import Loadable from 'react-loadable';
 
 import Login from 'app/modules/login/login';
 import Register from 'app/modules/account/register/register';
+import RegisterPlace from 'app/modules/account/register-place/register-place';
+import UserProfile from 'app/entities/event/user-profile';
+
 import Activate from 'app/modules/account/activate/activate';
 import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
 import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
@@ -32,6 +35,7 @@ const Routes = () => (
     <Switch>
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       <ErrorBoundaryRoute path="/register" component={Register} />
+      <ErrorBoundaryRoute path="/register-place" component={RegisterPlace} />
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
       <ErrorBoundaryRoute path="/reset/request" component={PasswordResetInit} />
       <ErrorBoundaryRoute path="/reset/finish/:key?" component={PasswordResetFinish} />

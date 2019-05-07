@@ -29,10 +29,6 @@
             ]
         },
         {
-            "fieldName": "possibleActivities",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "phoneNumber",
             "fieldType": "String",
             "fieldValidateRules": [

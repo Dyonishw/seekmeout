@@ -25,10 +25,6 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="possible_activities" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
             <column name="phone_number" type="varchar(255)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="ux_place_phone_number" />
             </column>

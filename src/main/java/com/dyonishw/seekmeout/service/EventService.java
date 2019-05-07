@@ -28,7 +28,13 @@ public interface EventService {
      */
     Page<EventDTO> findAll(Pageable pageable);
 
-
+    /**
+     * Get all the Event with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    Page<EventDTO> findAllWithEagerRelationships(Pageable pageable);
+    
     /**
      * Get the "id" event.
      *

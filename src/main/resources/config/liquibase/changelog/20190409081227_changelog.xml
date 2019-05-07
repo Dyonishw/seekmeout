@@ -1,0 +1,17 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="root (generated)" id="1554797551694-1">
+        <addColumn tableName="event">
+            <column name="casual_description" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="root (generated)" id="1554797551694-2">
+        <dropColumn columnName="activity_type" tableName="event"/>
+    </changeSet>
+    <changeSet author="root (generated)" id="1554797551694-3">
+        <dropColumn columnName="possible_activities" tableName="place"/>
+    </changeSet>
+    <changeSet author="root (generated)" id="1554797551694-4">
+        <dropColumn columnName="taking_place_at" tableName="event"/>
+    </changeSet>
+</databaseChangeLog>

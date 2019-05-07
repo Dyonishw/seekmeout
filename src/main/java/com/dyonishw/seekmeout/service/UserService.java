@@ -92,7 +92,7 @@ public class UserService {
             });
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
+    public User registerUser(UserDTO userDTO, String password, String authorityType) {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -120,7 +120,8 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+//        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorityRepository.findById(authorityType).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         userSearchRepository.save(newUser);
@@ -253,10 +254,16 @@ public class UserService {
                 log.debug("Changed password for User: {}", user);
             });
     }
+//
+//    @Transactional(readOnly = true)
+//    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
+//        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+//    }
+
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+        return userRepository.findAllByCreatedByNot(pageable, Constants.SYSTEM_ACCOUNT).map(UserDTO::new);
     }
 
     @Transactional(readOnly = true)
@@ -273,6 +280,12 @@ public class UserService {
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
+
+    // TODO: return users with a specific role (e.g ROLE_USER)
+//    @Transactional(readOnly = true)
+//    public Optional<User> getUserwithAuthoritie(String role) {
+//        return userRepository.findOneWithAuthoritiesById()
+//    }
 
     /**
      * Not activated users should be automatically deleted after 3 days.

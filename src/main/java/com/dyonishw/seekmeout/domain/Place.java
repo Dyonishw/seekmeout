@@ -25,17 +25,17 @@ public class Place implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+//    @SequenceGenerator(name = "sequenceGenerator")
+//    private Long id;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @NotNull
     @Column(name = "address", nullable = false)
     private String address;
-
-    @Column(name = "possible_activities")
-    private String possibleActivities;
 
     @NotNull
     @Column(name = "phone_number", nullable = false, unique = true)
@@ -83,6 +83,11 @@ public class Place implements Serializable {
     @OneToMany(mappedBy = "placeEvent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> placeEvents = new HashSet<>();
+
+    // TODO: Added this manually to implement ROLE_PLACE user controlling the Place entity
+    @OneToOne(mappedBy = "placeUser")
+    private User placeRoleUser;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -103,19 +108,6 @@ public class Place implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPossibleActivities() {
-        return possibleActivities;
-    }
-
-    public Place possibleActivities(String possibleActivities) {
-        this.possibleActivities = possibleActivities;
-        return this;
-    }
-
-    public void setPossibleActivities(String possibleActivities) {
-        this.possibleActivities = possibleActivities;
     }
 
     public String getPhoneNumber() {
@@ -284,6 +276,21 @@ public class Place implements Serializable {
     public void setPlaceEvents(Set<Event> events) {
         this.placeEvents = events;
     }
+
+    // TODO: manually implemented getters and setters
+    public User getPlaceRoleUser() {
+        return placeRoleUser;
+    }
+
+    public Place placeRoleUser(User user) {
+        this.placeRoleUser = user;
+        return this;
+    }
+
+    public void setPlaceRoleUser(User user) {
+        this.placeRoleUser = user;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -311,7 +318,6 @@ public class Place implements Serializable {
         return "Place{" +
             "id=" + getId() +
             ", address='" + getAddress() + "'" +
-            ", possibleActivities='" + getPossibleActivities() + "'" +
             ", phoneNumber='" + getPhoneNumber() + "'" +
             ", description='" + getDescription() + "'" +
             ", openHours='" + getOpenHours() + "'" +

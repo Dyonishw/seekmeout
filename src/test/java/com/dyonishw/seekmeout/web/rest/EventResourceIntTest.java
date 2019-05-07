@@ -5,6 +5,7 @@ import com.dyonishw.seekmeout.SeekMeOutApp;
 import com.dyonishw.seekmeout.domain.Event;
 import com.dyonishw.seekmeout.domain.Activity;
 import com.dyonishw.seekmeout.domain.Place;
+import com.dyonishw.seekmeout.domain.User;
 import com.dyonishw.seekmeout.repository.EventRepository;
 import com.dyonishw.seekmeout.repository.search.EventSearchRepository;
 import com.dyonishw.seekmeout.service.EventService;
@@ -17,6 +18,7 @@ import com.dyonishw.seekmeout.service.EventQueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +36,7 @@ import org.springframework.validation.Validator;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,26 +58,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = SeekMeOutApp.class)
 public class EventResourceIntTest {
 
-    private static final String DEFAULT_ACTIVITY_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_ACTIVITY_TYPE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TAKING_PLACE_AT = "AAAAAAAAAA";
-    private static final String UPDATED_TAKING_PLACE_AT = "BBBBBBBBBB";
-
-    private static final String DEFAULT_PEOPLE_ATTENDING = "AAAAAAAAAA";
-    private static final String UPDATED_PEOPLE_ATTENDING = "BBBBBBBBBB";
-
     private static final Boolean DEFAULT_CASUAL = false;
     private static final Boolean UPDATED_CASUAL = true;
 
     private static final LocalDate DEFAULT_HOUR = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_HOUR = LocalDate.now(ZoneId.systemDefault());
 
+    private static final String DEFAULT_CASUAL_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_CASUAL_DESCRIPTION = "BBBBBBBBBB";
+
     @Autowired
     private EventRepository eventRepository;
 
+    @Mock
+    private EventRepository eventRepositoryMock;
+
     @Autowired
     private EventMapper eventMapper;
+
+    @Mock
+    private EventService eventServiceMock;
 
     @Autowired
     private EventService eventService;
@@ -129,11 +132,9 @@ public class EventResourceIntTest {
      */
     public static Event createEntity(EntityManager em) {
         Event event = new Event()
-            .activityType(DEFAULT_ACTIVITY_TYPE)
-            .takingPlaceAt(DEFAULT_TAKING_PLACE_AT)
-            .peopleAttending(DEFAULT_PEOPLE_ATTENDING)
             .casual(DEFAULT_CASUAL)
-            .hour(DEFAULT_HOUR);
+            .hour(DEFAULT_HOUR)
+            .casualDescription(DEFAULT_CASUAL_DESCRIPTION);
         return event;
     }
 
@@ -158,11 +159,9 @@ public class EventResourceIntTest {
         List<Event> eventList = eventRepository.findAll();
         assertThat(eventList).hasSize(databaseSizeBeforeCreate + 1);
         Event testEvent = eventList.get(eventList.size() - 1);
-        assertThat(testEvent.getActivityType()).isEqualTo(DEFAULT_ACTIVITY_TYPE);
-        assertThat(testEvent.getTakingPlaceAt()).isEqualTo(DEFAULT_TAKING_PLACE_AT);
-        assertThat(testEvent.getPeopleAttending()).isEqualTo(DEFAULT_PEOPLE_ATTENDING);
         assertThat(testEvent.isCasual()).isEqualTo(DEFAULT_CASUAL);
         assertThat(testEvent.getHour()).isEqualTo(DEFAULT_HOUR);
+        assertThat(testEvent.getCasualDescription()).isEqualTo(DEFAULT_CASUAL_DESCRIPTION);
 
         // Validate the Event in Elasticsearch
         verify(mockEventSearchRepository, times(1)).save(testEvent);
@@ -240,13 +239,44 @@ public class EventResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-            .andExpect(jsonPath("$.[*].activityType").value(hasItem(DEFAULT_ACTIVITY_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].takingPlaceAt").value(hasItem(DEFAULT_TAKING_PLACE_AT.toString())))
-            .andExpect(jsonPath("$.[*].peopleAttending").value(hasItem(DEFAULT_PEOPLE_ATTENDING.toString())))
             .andExpect(jsonPath("$.[*].casual").value(hasItem(DEFAULT_CASUAL.booleanValue())))
-            .andExpect(jsonPath("$.[*].hour").value(hasItem(DEFAULT_HOUR.toString())));
+            .andExpect(jsonPath("$.[*].hour").value(hasItem(DEFAULT_HOUR.toString())))
+            .andExpect(jsonPath("$.[*].casualDescription").value(hasItem(DEFAULT_CASUAL_DESCRIPTION.toString())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllEventsWithEagerRelationshipsIsEnabled() throws Exception {
+        EventResource eventResource = new EventResource(eventServiceMock, eventQueryService);
+        when(eventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restEventMockMvc.perform(get("/api/events?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(eventServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllEventsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        EventResource eventResource = new EventResource(eventServiceMock, eventQueryService);
+            when(eventServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restEventMockMvc.perform(get("/api/events?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(eventServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getEvent() throws Exception {
@@ -258,128 +288,9 @@ public class EventResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(event.getId().intValue()))
-            .andExpect(jsonPath("$.activityType").value(DEFAULT_ACTIVITY_TYPE.toString()))
-            .andExpect(jsonPath("$.takingPlaceAt").value(DEFAULT_TAKING_PLACE_AT.toString()))
-            .andExpect(jsonPath("$.peopleAttending").value(DEFAULT_PEOPLE_ATTENDING.toString()))
             .andExpect(jsonPath("$.casual").value(DEFAULT_CASUAL.booleanValue()))
-            .andExpect(jsonPath("$.hour").value(DEFAULT_HOUR.toString()));
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByActivityTypeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where activityType equals to DEFAULT_ACTIVITY_TYPE
-        defaultEventShouldBeFound("activityType.equals=" + DEFAULT_ACTIVITY_TYPE);
-
-        // Get all the eventList where activityType equals to UPDATED_ACTIVITY_TYPE
-        defaultEventShouldNotBeFound("activityType.equals=" + UPDATED_ACTIVITY_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByActivityTypeIsInShouldWork() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where activityType in DEFAULT_ACTIVITY_TYPE or UPDATED_ACTIVITY_TYPE
-        defaultEventShouldBeFound("activityType.in=" + DEFAULT_ACTIVITY_TYPE + "," + UPDATED_ACTIVITY_TYPE);
-
-        // Get all the eventList where activityType equals to UPDATED_ACTIVITY_TYPE
-        defaultEventShouldNotBeFound("activityType.in=" + UPDATED_ACTIVITY_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByActivityTypeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where activityType is not null
-        defaultEventShouldBeFound("activityType.specified=true");
-
-        // Get all the eventList where activityType is null
-        defaultEventShouldNotBeFound("activityType.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByTakingPlaceAtIsEqualToSomething() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where takingPlaceAt equals to DEFAULT_TAKING_PLACE_AT
-        defaultEventShouldBeFound("takingPlaceAt.equals=" + DEFAULT_TAKING_PLACE_AT);
-
-        // Get all the eventList where takingPlaceAt equals to UPDATED_TAKING_PLACE_AT
-        defaultEventShouldNotBeFound("takingPlaceAt.equals=" + UPDATED_TAKING_PLACE_AT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByTakingPlaceAtIsInShouldWork() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where takingPlaceAt in DEFAULT_TAKING_PLACE_AT or UPDATED_TAKING_PLACE_AT
-        defaultEventShouldBeFound("takingPlaceAt.in=" + DEFAULT_TAKING_PLACE_AT + "," + UPDATED_TAKING_PLACE_AT);
-
-        // Get all the eventList where takingPlaceAt equals to UPDATED_TAKING_PLACE_AT
-        defaultEventShouldNotBeFound("takingPlaceAt.in=" + UPDATED_TAKING_PLACE_AT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByTakingPlaceAtIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where takingPlaceAt is not null
-        defaultEventShouldBeFound("takingPlaceAt.specified=true");
-
-        // Get all the eventList where takingPlaceAt is null
-        defaultEventShouldNotBeFound("takingPlaceAt.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByPeopleAttendingIsEqualToSomething() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where peopleAttending equals to DEFAULT_PEOPLE_ATTENDING
-        defaultEventShouldBeFound("peopleAttending.equals=" + DEFAULT_PEOPLE_ATTENDING);
-
-        // Get all the eventList where peopleAttending equals to UPDATED_PEOPLE_ATTENDING
-        defaultEventShouldNotBeFound("peopleAttending.equals=" + UPDATED_PEOPLE_ATTENDING);
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByPeopleAttendingIsInShouldWork() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where peopleAttending in DEFAULT_PEOPLE_ATTENDING or UPDATED_PEOPLE_ATTENDING
-        defaultEventShouldBeFound("peopleAttending.in=" + DEFAULT_PEOPLE_ATTENDING + "," + UPDATED_PEOPLE_ATTENDING);
-
-        // Get all the eventList where peopleAttending equals to UPDATED_PEOPLE_ATTENDING
-        defaultEventShouldNotBeFound("peopleAttending.in=" + UPDATED_PEOPLE_ATTENDING);
-    }
-
-    @Test
-    @Transactional
-    public void getAllEventsByPeopleAttendingIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Get all the eventList where peopleAttending is not null
-        defaultEventShouldBeFound("peopleAttending.specified=true");
-
-        // Get all the eventList where peopleAttending is null
-        defaultEventShouldNotBeFound("peopleAttending.specified=false");
+            .andExpect(jsonPath("$.hour").value(DEFAULT_HOUR.toString()))
+            .andExpect(jsonPath("$.casualDescription").value(DEFAULT_CASUAL_DESCRIPTION.toString()));
     }
 
     @Test
@@ -489,6 +400,45 @@ public class EventResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllEventsByCasualDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        eventRepository.saveAndFlush(event);
+
+        // Get all the eventList where casualDescription equals to DEFAULT_CASUAL_DESCRIPTION
+        defaultEventShouldBeFound("casualDescription.equals=" + DEFAULT_CASUAL_DESCRIPTION);
+
+        // Get all the eventList where casualDescription equals to UPDATED_CASUAL_DESCRIPTION
+        defaultEventShouldNotBeFound("casualDescription.equals=" + UPDATED_CASUAL_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllEventsByCasualDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        eventRepository.saveAndFlush(event);
+
+        // Get all the eventList where casualDescription in DEFAULT_CASUAL_DESCRIPTION or UPDATED_CASUAL_DESCRIPTION
+        defaultEventShouldBeFound("casualDescription.in=" + DEFAULT_CASUAL_DESCRIPTION + "," + UPDATED_CASUAL_DESCRIPTION);
+
+        // Get all the eventList where casualDescription equals to UPDATED_CASUAL_DESCRIPTION
+        defaultEventShouldNotBeFound("casualDescription.in=" + UPDATED_CASUAL_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllEventsByCasualDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        eventRepository.saveAndFlush(event);
+
+        // Get all the eventList where casualDescription is not null
+        defaultEventShouldBeFound("casualDescription.specified=true");
+
+        // Get all the eventList where casualDescription is null
+        defaultEventShouldNotBeFound("casualDescription.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllEventsByActivityEventIsEqualToSomething() throws Exception {
         // Initialize the database
         Activity activityEvent = ActivityResourceIntTest.createEntity(em);
@@ -524,6 +474,25 @@ public class EventResourceIntTest {
         defaultEventShouldNotBeFound("placeEventId.equals=" + (placeEventId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllEventsByEventUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        User eventUser = UserResourceIntTest.createEntity(em);
+        em.persist(eventUser);
+        em.flush();
+        event.addEventUser(eventUser);
+        eventRepository.saveAndFlush(event);
+        Long eventUserId = eventUser.getId();
+
+        // Get all the eventList where eventUser equals to eventUserId
+        defaultEventShouldBeFound("eventUserId.equals=" + eventUserId);
+
+        // Get all the eventList where eventUser equals to eventUserId + 1
+        defaultEventShouldNotBeFound("eventUserId.equals=" + (eventUserId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -532,11 +501,9 @@ public class EventResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-            .andExpect(jsonPath("$.[*].activityType").value(hasItem(DEFAULT_ACTIVITY_TYPE)))
-            .andExpect(jsonPath("$.[*].takingPlaceAt").value(hasItem(DEFAULT_TAKING_PLACE_AT)))
-            .andExpect(jsonPath("$.[*].peopleAttending").value(hasItem(DEFAULT_PEOPLE_ATTENDING)))
             .andExpect(jsonPath("$.[*].casual").value(hasItem(DEFAULT_CASUAL.booleanValue())))
-            .andExpect(jsonPath("$.[*].hour").value(hasItem(DEFAULT_HOUR.toString())));
+            .andExpect(jsonPath("$.[*].hour").value(hasItem(DEFAULT_HOUR.toString())))
+            .andExpect(jsonPath("$.[*].casualDescription").value(hasItem(DEFAULT_CASUAL_DESCRIPTION)));
 
         // Check, that the count call also returns 1
         restEventMockMvc.perform(get("/api/events/count?sort=id,desc&" + filter))
@@ -584,11 +551,9 @@ public class EventResourceIntTest {
         // Disconnect from session so that the updates on updatedEvent are not directly saved in db
         em.detach(updatedEvent);
         updatedEvent
-            .activityType(UPDATED_ACTIVITY_TYPE)
-            .takingPlaceAt(UPDATED_TAKING_PLACE_AT)
-            .peopleAttending(UPDATED_PEOPLE_ATTENDING)
             .casual(UPDATED_CASUAL)
-            .hour(UPDATED_HOUR);
+            .hour(UPDATED_HOUR)
+            .casualDescription(UPDATED_CASUAL_DESCRIPTION);
         EventDTO eventDTO = eventMapper.toDto(updatedEvent);
 
         restEventMockMvc.perform(put("/api/events")
@@ -600,11 +565,9 @@ public class EventResourceIntTest {
         List<Event> eventList = eventRepository.findAll();
         assertThat(eventList).hasSize(databaseSizeBeforeUpdate);
         Event testEvent = eventList.get(eventList.size() - 1);
-        assertThat(testEvent.getActivityType()).isEqualTo(UPDATED_ACTIVITY_TYPE);
-        assertThat(testEvent.getTakingPlaceAt()).isEqualTo(UPDATED_TAKING_PLACE_AT);
-        assertThat(testEvent.getPeopleAttending()).isEqualTo(UPDATED_PEOPLE_ATTENDING);
         assertThat(testEvent.isCasual()).isEqualTo(UPDATED_CASUAL);
         assertThat(testEvent.getHour()).isEqualTo(UPDATED_HOUR);
+        assertThat(testEvent.getCasualDescription()).isEqualTo(UPDATED_CASUAL_DESCRIPTION);
 
         // Validate the Event in Elasticsearch
         verify(mockEventSearchRepository, times(1)).save(testEvent);
@@ -665,11 +628,9 @@ public class EventResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-            .andExpect(jsonPath("$.[*].activityType").value(hasItem(DEFAULT_ACTIVITY_TYPE)))
-            .andExpect(jsonPath("$.[*].takingPlaceAt").value(hasItem(DEFAULT_TAKING_PLACE_AT)))
-            .andExpect(jsonPath("$.[*].peopleAttending").value(hasItem(DEFAULT_PEOPLE_ATTENDING)))
             .andExpect(jsonPath("$.[*].casual").value(hasItem(DEFAULT_CASUAL.booleanValue())))
-            .andExpect(jsonPath("$.[*].hour").value(hasItem(DEFAULT_HOUR.toString())));
+            .andExpect(jsonPath("$.[*].hour").value(hasItem(DEFAULT_HOUR.toString())))
+            .andExpect(jsonPath("$.[*].casualDescription").value(hasItem(DEFAULT_CASUAL_DESCRIPTION)));
     }
 
     @Test

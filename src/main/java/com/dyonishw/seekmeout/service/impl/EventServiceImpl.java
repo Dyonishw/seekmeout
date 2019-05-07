@@ -69,6 +69,15 @@ public class EventServiceImpl implements EventService {
             .map(eventMapper::toDto);
     }
 
+    /**
+     * Get all the Event with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    public Page<EventDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return eventRepository.findAllWithEagerRelationships(pageable).map(eventMapper::toDto);
+    }
+    
 
     /**
      * Get one event by id.
@@ -80,7 +89,7 @@ public class EventServiceImpl implements EventService {
     @Transactional(readOnly = true)
     public Optional<EventDTO> findOne(Long id) {
         log.debug("Request to get Event : {}", id);
-        return eventRepository.findById(id)
+        return eventRepository.findOneWithEagerRelationships(id)
             .map(eventMapper::toDto);
     }
 

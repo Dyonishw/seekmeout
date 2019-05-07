@@ -2,6 +2,8 @@ package com.dyonishw.seekmeout.service.dto;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -11,17 +13,13 @@ public class EventDTO implements Serializable {
 
     private Long id;
 
-    private String activityType;
-
-    private String takingPlaceAt;
-
-    private String peopleAttending;
-
     @NotNull
     private Boolean casual;
 
     @NotNull
     private LocalDate hour;
+
+    private String casualDescription;
 
 
     private Long activityEventId;
@@ -32,36 +30,14 @@ public class EventDTO implements Serializable {
 
     private String placeEventName;
 
+    private Set<UserDTO> eventUsers = new HashSet<>();
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
-    }
-
-    public String getTakingPlaceAt() {
-        return takingPlaceAt;
-    }
-
-    public void setTakingPlaceAt(String takingPlaceAt) {
-        this.takingPlaceAt = takingPlaceAt;
-    }
-
-    public String getPeopleAttending() {
-        return peopleAttending;
-    }
-
-    public void setPeopleAttending(String peopleAttending) {
-        this.peopleAttending = peopleAttending;
     }
 
     public Boolean isCasual() {
@@ -78,6 +54,14 @@ public class EventDTO implements Serializable {
 
     public void setHour(LocalDate hour) {
         this.hour = hour;
+    }
+
+    public String getCasualDescription() {
+        return casualDescription;
+    }
+
+    public void setCasualDescription(String casualDescription) {
+        this.casualDescription = casualDescription;
     }
 
     public Long getActivityEventId() {
@@ -112,6 +96,14 @@ public class EventDTO implements Serializable {
         this.placeEventName = placeName;
     }
 
+    public Set<UserDTO> getEventUsers() {
+        return eventUsers;
+    }
+
+    public void setEventUsers(Set<UserDTO> users) {
+        this.eventUsers = users;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -137,11 +129,9 @@ public class EventDTO implements Serializable {
     public String toString() {
         return "EventDTO{" +
             "id=" + getId() +
-            ", activityType='" + getActivityType() + "'" +
-            ", takingPlaceAt='" + getTakingPlaceAt() + "'" +
-            ", peopleAttending='" + getPeopleAttending() + "'" +
             ", casual='" + isCasual() + "'" +
             ", hour='" + getHour() + "'" +
+            ", casualDescription='" + getCasualDescription() + "'" +
             ", activityEvent=" + getActivityEventId() +
             ", activityEvent='" + getActivityEventType() + "'" +
             ", placeEvent=" + getPlaceEventId() +

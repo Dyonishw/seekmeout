@@ -16,13 +16,13 @@
       "detail": {
         "title": "Event"
       },
-      "activityType": "Activity Type",
-      "takingPlaceAt": "Taking Place At",
-      "peopleAttending": "People Attending",
       "casual": "Casual",
       "hour": "Hour",
+      "casualDescription": "Casual Description",
       "activityEvent": "Activity Event",
-      "placeEvent": "Place Event"
+      "placeEvent": "Place Event",
+      "eventUser": "Event User",
+      "currentUser": "The current user is:"
     }
   }
 }

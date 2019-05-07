@@ -5,6 +5,7 @@ import com.dyonishw.seekmeout.domain.User;
 import com.dyonishw.seekmeout.repository.UserRepository;
 import com.dyonishw.seekmeout.repository.search.UserSearchRepository;
 import com.dyonishw.seekmeout.security.AuthoritiesConstants;
+import com.dyonishw.seekmeout.security.SecurityUtils;
 import com.dyonishw.seekmeout.service.MailService;
 import com.dyonishw.seekmeout.service.UserService;
 import com.dyonishw.seekmeout.service.dto.UserDTO;
@@ -72,12 +73,15 @@ public class UserResource {
 
     private final UserSearchRepository userSearchRepository;
 
+//    private final SecurityUtils securityUtils;
+
     public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository) {
 
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.userSearchRepository = userSearchRepository;
+//        this.securityUtils = securityUtils;
     }
 
     /**
@@ -147,10 +151,43 @@ public class UserResource {
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+    /**
+     * GET /users : get all ROLE_USER users.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/Role-users")
+    public ResponseEntity<List<UserDTO>> getAllRoleUsers(Pageable pageable) {
+
+        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+//    /**
+//     * GET /users : get all users.
+//     *
+//     * @param pageable the pagination information
+//     * @return the ResponseEntity with status 200 (OK) and with body all users
+//     */
+//    @GetMapping("/users")
+//    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+//
+//        final Page<UserDTO> page = userService.getUserWithAuthorities();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+//        return new ResponseEntity<>(page, headers, HttpStatus.OK);
+//    }
+
+
+
+
 
     /**
      * @return a string list of the all of the roles
@@ -173,6 +210,29 @@ public class UserResource {
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
+    }
+
+    /**
+     * Get /currentUser : get current user logged in
+     *
+     *
+     */
+    @GetMapping("/currentUser")
+    public ResponseEntity<UserDTO> getCurrentUser() {
+//    public String getCurrentUser() {
+
+//        Optional<String> currentUser = securityUtils.getCurrentUserLogin();
+//        Optional<UserDTO> currentLogin = userRepository.findOneByLogin(currentUser.get());
+//        Optional<User> currentLogin = userService.getUserWithAuthoritiesByLogin(currentUser.get());
+//        return new ResponseEntity<>(currentLogin.get(), HttpStatus.OK);
+//        return ResponseUtil.wrapOrNotFound(
+//            currentLogin.get()
+//                .map(UserDTO::new));
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserWithAuthorities()
+                .map(UserDTO::new));
+//        return userService.getUserWithAuthorities().get().getLogin();
+
     }
 
     /**

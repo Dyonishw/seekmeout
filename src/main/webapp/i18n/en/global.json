@@ -20,7 +20,8 @@
         "sessions": "Sessions",
         "login": "Sign in",
         "logout": "Sign out",
-        "register": "Register"
+        "register": "Register",
+        "registerPlace": "Register a new Place"
       },
       "admin": {
         "main": "Administration",
@@ -101,6 +102,7 @@
       "cancel": "Cancel",
       "delete": "Delete",
       "edit": "Edit",
+      "attend": "Attend this event",
       "open": "Open",
       "save": "Save",
       "view": "View"

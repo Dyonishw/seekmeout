@@ -120,12 +120,6 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
                   />
                 </AvGroup>
                 <AvGroup>
-                  <Label id="possibleActivitiesLabel" for="possibleActivities">
-                    <Translate contentKey="seekMeOutApp.place.possibleActivities">Possible Activities</Translate>
-                  </Label>
-                  <AvField id="place-possibleActivities" type="text" name="possibleActivities" />
-                </AvGroup>
-                <AvGroup>
                   <Label id="phoneNumberLabel" for="phoneNumber">
                     <Translate contentKey="seekMeOutApp.place.phoneNumber">Phone Number</Translate>
                   </Label>

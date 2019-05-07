@@ -11,6 +11,8 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -29,15 +31,6 @@ public class Event implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "activity_type")
-    private String activityType;
-
-    @Column(name = "taking_place_at")
-    private String takingPlaceAt;
-
-    @Column(name = "people_attending")
-    private String peopleAttending;
-
     @NotNull
     @Column(name = "casual", nullable = false)
     private Boolean casual;
@@ -45,6 +38,9 @@ public class Event implements Serializable {
     @NotNull
     @Column(name = "hour", nullable = false)
     private LocalDate hour;
+
+    @Column(name = "casual_description")
+    private String casualDescription;
 
     @ManyToOne
     @JsonIgnoreProperties("events")
@@ -54,6 +50,13 @@ public class Event implements Serializable {
     @JsonIgnoreProperties("events")
     private Place placeEvent;
 
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "event_event_user",
+               joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "event_user_id", referencedColumnName = "id"))
+    private Set<User> eventUsers = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -61,45 +64,6 @@ public class Event implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getActivityType() {
-        return activityType;
-    }
-
-    public Event activityType(String activityType) {
-        this.activityType = activityType;
-        return this;
-    }
-
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
-    }
-
-    public String getTakingPlaceAt() {
-        return takingPlaceAt;
-    }
-
-    public Event takingPlaceAt(String takingPlaceAt) {
-        this.takingPlaceAt = takingPlaceAt;
-        return this;
-    }
-
-    public void setTakingPlaceAt(String takingPlaceAt) {
-        this.takingPlaceAt = takingPlaceAt;
-    }
-
-    public String getPeopleAttending() {
-        return peopleAttending;
-    }
-
-    public Event peopleAttending(String peopleAttending) {
-        this.peopleAttending = peopleAttending;
-        return this;
-    }
-
-    public void setPeopleAttending(String peopleAttending) {
-        this.peopleAttending = peopleAttending;
     }
 
     public Boolean isCasual() {
@@ -128,6 +92,19 @@ public class Event implements Serializable {
         this.hour = hour;
     }
 
+    public String getCasualDescription() {
+        return casualDescription;
+    }
+
+    public Event casualDescription(String casualDescription) {
+        this.casualDescription = casualDescription;
+        return this;
+    }
+
+    public void setCasualDescription(String casualDescription) {
+        this.casualDescription = casualDescription;
+    }
+
     public Activity getActivityEvent() {
         return activityEvent;
     }
@@ -152,6 +129,29 @@ public class Event implements Serializable {
 
     public void setPlaceEvent(Place place) {
         this.placeEvent = place;
+    }
+
+    public Set<User> getEventUsers() {
+        return eventUsers;
+    }
+
+    public Event eventUsers(Set<User> users) {
+        this.eventUsers = users;
+        return this;
+    }
+
+    public Event addEventUser(User user) {
+        this.eventUsers.add(user);
+        return this;
+    }
+
+    public Event removeEventUser(User user) {
+        this.eventUsers.remove(user);
+        return this;
+    }
+
+    public void setEventUsers(Set<User> users) {
+        this.eventUsers = users;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -179,11 +179,9 @@ public class Event implements Serializable {
     public String toString() {
         return "Event{" +
             "id=" + getId() +
-            ", activityType='" + getActivityType() + "'" +
-            ", takingPlaceAt='" + getTakingPlaceAt() + "'" +
-            ", peopleAttending='" + getPeopleAttending() + "'" +
             ", casual='" + isCasual() + "'" +
             ", hour='" + getHour() + "'" +
+            ", casualDescription='" + getCasualDescription() + "'" +
             "}";
     }
 }

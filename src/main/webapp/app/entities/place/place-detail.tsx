@@ -35,12 +35,6 @@ export class PlaceDetail extends React.Component<IPlaceDetailProps> {
             </dt>
             <dd>{placeEntity.address}</dd>
             <dt>
-              <span id="possibleActivities">
-                <Translate contentKey="seekMeOutApp.place.possibleActivities">Possible Activities</Translate>
-              </span>
-            </dt>
-            <dd>{placeEntity.possibleActivities}</dd>
-            <dt>
               <span id="phoneNumber">
                 <Translate contentKey="seekMeOutApp.place.phoneNumber">Phone Number</Translate>
               </span>

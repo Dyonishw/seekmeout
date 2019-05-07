@@ -4,6 +4,7 @@ package com.dyonishw.seekmeout.web.rest;
 import com.dyonishw.seekmeout.domain.User;
 import com.dyonishw.seekmeout.repository.UserRepository;
 import com.dyonishw.seekmeout.security.SecurityUtils;
+import com.dyonishw.seekmeout.security.AuthoritiesConstants;
 import com.dyonishw.seekmeout.service.MailService;
 import com.dyonishw.seekmeout.service.UserService;
 import com.dyonishw.seekmeout.service.dto.PasswordChangeDTO;
@@ -45,7 +46,26 @@ public class AccountResource {
     }
 
     /**
-     * POST  /register : register the user.
+     * POST  /register-place : register the PLACE user.
+     *
+     * @param managedUserVM the managed user View Model
+     * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
+     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
+     * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
+     */
+    @PostMapping("/register-place")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerPlaceAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+        if (!checkPasswordLength(managedUserVM.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        User user = userService
+            .registerUser(managedUserVM, managedUserVM.getPassword(), AuthoritiesConstants.PLACE);
+        mailService.sendActivationEmail(user);
+    }
+
+    /**
+     * POST  /register : register the People/User user.
      *
      * @param managedUserVM the managed user View Model
      * @throws InvalidPasswordException 400 (Bad Request) if the password is incorrect
@@ -58,7 +78,8 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        User user = userService
+            .registerUser(managedUserVM, managedUserVM.getPassword(), AuthoritiesConstants.USER);
         mailService.sendActivationEmail(user);
     }
 

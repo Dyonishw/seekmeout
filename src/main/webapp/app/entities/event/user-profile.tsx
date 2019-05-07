@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { languages } from 'app/config/translation';
-import { getUser, getCurrentUser } from './user-management.reducer';
+import { getUser, getCurrentUser } from 'app/modules/administration/user-management/user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 
-export interface IUserManagementDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
+export interface IUserProfileDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
 
-export class UserManagementDetail extends React.Component<IUserManagementDetailProps> {
+export class UserProfileDetail extends React.Component<IUserProfileDetailProps> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
     this.props.getCurrentUser();
@@ -124,4 +124,4 @@ type DispatchProps = typeof mapDispatchToProps;
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserManagementDetail);
+)(UserProfileDetail);

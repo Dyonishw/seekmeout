@@ -25,19 +25,17 @@ public class EventCriteria implements Serializable {
 
     private LongFilter id;
 
-    private StringFilter activityType;
-
-    private StringFilter takingPlaceAt;
-
-    private StringFilter peopleAttending;
-
     private BooleanFilter casual;
 
     private LocalDateFilter hour;
 
+    private StringFilter casualDescription;
+
     private LongFilter activityEventId;
 
     private LongFilter placeEventId;
+
+    private LongFilter eventUserId;
 
     public LongFilter getId() {
         return id;
@@ -45,30 +43,6 @@ public class EventCriteria implements Serializable {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(StringFilter activityType) {
-        this.activityType = activityType;
-    }
-
-    public StringFilter getTakingPlaceAt() {
-        return takingPlaceAt;
-    }
-
-    public void setTakingPlaceAt(StringFilter takingPlaceAt) {
-        this.takingPlaceAt = takingPlaceAt;
-    }
-
-    public StringFilter getPeopleAttending() {
-        return peopleAttending;
-    }
-
-    public void setPeopleAttending(StringFilter peopleAttending) {
-        this.peopleAttending = peopleAttending;
     }
 
     public BooleanFilter getCasual() {
@@ -87,6 +61,14 @@ public class EventCriteria implements Serializable {
         this.hour = hour;
     }
 
+    public StringFilter getCasualDescription() {
+        return casualDescription;
+    }
+
+    public void setCasualDescription(StringFilter casualDescription) {
+        this.casualDescription = casualDescription;
+    }
+
     public LongFilter getActivityEventId() {
         return activityEventId;
     }
@@ -103,6 +85,14 @@ public class EventCriteria implements Serializable {
         this.placeEventId = placeEventId;
     }
 
+    public LongFilter getEventUserId() {
+        return eventUserId;
+    }
+
+    public void setEventUserId(LongFilter eventUserId) {
+        this.eventUserId = eventUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -115,26 +105,24 @@ public class EventCriteria implements Serializable {
         final EventCriteria that = (EventCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(activityType, that.activityType) &&
-            Objects.equals(takingPlaceAt, that.takingPlaceAt) &&
-            Objects.equals(peopleAttending, that.peopleAttending) &&
             Objects.equals(casual, that.casual) &&
             Objects.equals(hour, that.hour) &&
+            Objects.equals(casualDescription, that.casualDescription) &&
             Objects.equals(activityEventId, that.activityEventId) &&
-            Objects.equals(placeEventId, that.placeEventId);
+            Objects.equals(placeEventId, that.placeEventId) &&
+            Objects.equals(eventUserId, that.eventUserId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        activityType,
-        takingPlaceAt,
-        peopleAttending,
         casual,
         hour,
+        casualDescription,
         activityEventId,
-        placeEventId
+        placeEventId,
+        eventUserId
         );
     }
 
@@ -142,13 +130,12 @@ public class EventCriteria implements Serializable {
     public String toString() {
         return "EventCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (activityType != null ? "activityType=" + activityType + ", " : "") +
-                (takingPlaceAt != null ? "takingPlaceAt=" + takingPlaceAt + ", " : "") +
-                (peopleAttending != null ? "peopleAttending=" + peopleAttending + ", " : "") +
                 (casual != null ? "casual=" + casual + ", " : "") +
                 (hour != null ? "hour=" + hour + ", " : "") +
+                (casualDescription != null ? "casualDescription=" + casualDescription + ", " : "") +
                 (activityEventId != null ? "activityEventId=" + activityEventId + ", " : "") +
                 (placeEventId != null ? "placeEventId=" + placeEventId + ", " : "") +
+                (eventUserId != null ? "eventUserId=" + eventUserId + ", " : "") +
             "}";
     }
 

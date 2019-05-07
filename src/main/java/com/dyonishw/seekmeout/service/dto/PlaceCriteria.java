@@ -26,8 +26,6 @@ public class PlaceCriteria implements Serializable {
 
     private StringFilter address;
 
-    private StringFilter possibleActivities;
-
     private StringFilter phoneNumber;
 
     private StringFilter description;
@@ -60,14 +58,6 @@ public class PlaceCriteria implements Serializable {
 
     public void setAddress(StringFilter address) {
         this.address = address;
-    }
-
-    public StringFilter getPossibleActivities() {
-        return possibleActivities;
-    }
-
-    public void setPossibleActivities(StringFilter possibleActivities) {
-        this.possibleActivities = possibleActivities;
     }
 
     public StringFilter getPhoneNumber() {
@@ -155,7 +145,6 @@ public class PlaceCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(address, that.address) &&
-            Objects.equals(possibleActivities, that.possibleActivities) &&
             Objects.equals(phoneNumber, that.phoneNumber) &&
             Objects.equals(description, that.description) &&
             Objects.equals(openHours, that.openHours) &&
@@ -172,7 +161,6 @@ public class PlaceCriteria implements Serializable {
         return Objects.hash(
         id,
         address,
-        possibleActivities,
         phoneNumber,
         description,
         openHours,
@@ -190,7 +178,6 @@ public class PlaceCriteria implements Serializable {
         return "PlaceCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (address != null ? "address=" + address + ", " : "") +
-                (possibleActivities != null ? "possibleActivities=" + possibleActivities + ", " : "") +
                 (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (openHours != null ? "openHours=" + openHours + ", " : "") +

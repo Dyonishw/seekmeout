@@ -7,20 +7,36 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './event.reducer';
+import { getEntity, updateEntity } from './event.reducer';
+import { getCurrentUser } from 'app/modules/administration/user-management/user-management.reducer.ts';
 import { IEvent } from 'app/shared/model/event.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+import { mapIdList } from 'app/shared/util/entity-utils';
+
 export interface IEventDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export class EventDetail extends React.Component<IEventDetailProps> {
+
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
+    this.props.getCurrentUser();
   }
+  // TODO: Works, but it's ugly => Fix it
+  // TODO: make eventEntity.eventUsers update
+  addCurrentUser = () => {
+    const { eventEntity } = this.props;
+
+    const entity = {
+      ...eventEntity,
+      eventUsers: this.props.eventEntity.eventUsers.concat(this.props.currentUser);
+    };
+    this.props.updateEntity(entity);
+  };
 
   render() {
-    const { eventEntity } = this.props;
+    const { eventEntity, currentUser, loading, updating } = this.props;
     return (
       <Row>
         <Col md="8">
@@ -28,24 +44,6 @@ export class EventDetail extends React.Component<IEventDetailProps> {
             <Translate contentKey="seekMeOutApp.event.detail.title">Event</Translate> [<b>{eventEntity.id}</b>]
           </h2>
           <dl className="jh-entity-details">
-            <dt>
-              <span id="activityType">
-                <Translate contentKey="seekMeOutApp.event.activityType">Activity Type</Translate>
-              </span>
-            </dt>
-            <dd>{eventEntity.activityType}</dd>
-            <dt>
-              <span id="takingPlaceAt">
-                <Translate contentKey="seekMeOutApp.event.takingPlaceAt">Taking Place At</Translate>
-              </span>
-            </dt>
-            <dd>{eventEntity.takingPlaceAt}</dd>
-            <dt>
-              <span id="peopleAttending">
-                <Translate contentKey="seekMeOutApp.event.peopleAttending">People Attending</Translate>
-              </span>
-            </dt>
-            <dd>{eventEntity.peopleAttending}</dd>
             <dt>
               <span id="casual">
                 <Translate contentKey="seekMeOutApp.event.casual">Casual</Translate>
@@ -61,6 +59,12 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <TextFormat value={eventEntity.hour} type="date" format={APP_LOCAL_DATE_FORMAT} />
             </dd>
             <dt>
+              <span id="casualDescription">
+                <Translate contentKey="seekMeOutApp.event.casualDescription">Casual Description</Translate>
+              </span>
+            </dt>
+            <dd>{eventEntity.casualDescription}</dd>
+            <dt>
               <Translate contentKey="seekMeOutApp.event.activityEvent">Activity Event</Translate>
             </dt>
             <dd>{eventEntity.activityEventType ? eventEntity.activityEventType : ''}</dd>
@@ -68,6 +72,25 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <Translate contentKey="seekMeOutApp.event.placeEvent">Place Event</Translate>
             </dt>
             <dd>{eventEntity.placeEventName ? eventEntity.placeEventName : ''}</dd>
+            <dt>
+              <Translate contentKey="seekMeOutApp.event.eventUser">Event User</Translate>
+            </dt>
+            <dd>
+              {eventEntity.eventUsers
+                ? eventEntity.eventUsers.map((val, i) => (
+                    <span key={val.id}>
+                      <a><Link to={`attending/${val.login}`}>{val.login}</Link></a>
+                      {i === eventEntity.eventUsers.length - 1 ? '' : ', '}
+                    </span>
+                  ))
+                : null}{' '}
+            </dd>
+            <dt>
+              <Translate contentKey="userManagement.currentUser">The current user is:</Translate>
+            </dt>
+            <dd>
+              { currentUser.login ? currentUser.login : ''}
+            </dd>
           </dl>
           <Button tag={Link} to="/entity/event" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}
@@ -81,6 +104,15 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <Translate contentKey="entity.action.edit">Edit</Translate>
             </span>
           </Button>
+          <Button type="reset" className="input-group-addon" onClick={this.addCurrentUser}>
+            <FontAwesomeIcon icon="trash" />
+          </Button>
+          <Button type="button" className="input-group-addon" onClick={this.addCurrentUser}>
+            <FontAwesomeIcon icon="trash" />
+            <span className="d-none d-md-inline">
+              <Translate contentKey="entity.action.attend">Attend this event</Translate>
+            </span>
+          </Button>
         </Col>
       </Row>
     );
@@ -88,10 +120,14 @@ export class EventDetail extends React.Component<IEventDetailProps> {
 }
 
 const mapStateToProps = ({ event }: IRootState) => ({
-  eventEntity: event.entity
+  eventEntity: event.entity,
+  currentUser: event.currentUser,
+  loading: event.loading,
+  updating: event.updating,
+  updateSuccess: event.updateSuccess
 });
 
-const mapDispatchToProps = { getEntity };
+const mapDispatchToProps = { getEntity, getCurrentUser, updateEntity };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

@@ -2,12 +2,13 @@ import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { IUser, defaultValue } from 'app/shared/model/user.model';
+import { IUser, defaultValue, ICurrentUser, defaultCurrentUser } from 'app/shared/model/user.model';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
   FETCH_USERS: 'userManagement/FETCH_USERS',
   FETCH_USER: 'userManagement/FETCH_USER',
+  FETCH_CURRENT_USER: 'userManagement/FETCH_CURRENT_USER',
   CREATE_USER: 'userManagement/CREATE_USER',
   UPDATE_USER: 'userManagement/UPDATE_USER',
   DELETE_USER: 'userManagement/DELETE_USER',
@@ -18,6 +19,7 @@ const initialState = {
   loading: false,
   errorMessage: null,
   users: [] as ReadonlyArray<IUser>,
+  currentUser: defaultCurrentUser,
   authorities: [] as any[],
   user: defaultValue,
   updating: false,
@@ -42,6 +44,13 @@ export default (state: UserManagementState = initialState, action): UserManageme
         updateSuccess: false,
         loading: true
       };
+    case REQUEST(ACTION_TYPES.FETCH_CURRENT_USER):
+      return {
+        ...state,
+        errorMessage: null,
+        updateSuccess: false,
+        loading: true
+      };
     case REQUEST(ACTION_TYPES.CREATE_USER):
     case REQUEST(ACTION_TYPES.UPDATE_USER):
     case REQUEST(ACTION_TYPES.DELETE_USER):
@@ -53,6 +62,8 @@ export default (state: UserManagementState = initialState, action): UserManageme
       };
     case FAILURE(ACTION_TYPES.FETCH_USERS):
     case FAILURE(ACTION_TYPES.FETCH_USER):
+    case FAILURE(ACTION_TYPES.FETCH_CURRENT_USER):
+
     case FAILURE(ACTION_TYPES.FETCH_ROLES):
     case FAILURE(ACTION_TYPES.CREATE_USER):
     case FAILURE(ACTION_TYPES.UPDATE_USER):
@@ -82,6 +93,13 @@ export default (state: UserManagementState = initialState, action): UserManageme
         loading: false,
         user: action.payload.data
       };
+    case SUCCESS(ACTION_TYPES.FETCH_CURRENT_USER):
+      return {
+        ...state,
+        loading: false,
+        currentUser: action.payload.data
+      };
+
     case SUCCESS(ACTION_TYPES.CREATE_USER):
     case SUCCESS(ACTION_TYPES.UPDATE_USER):
       return {
@@ -120,6 +138,14 @@ export const getRoles = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
   payload: axios.get(`${apiUrl}/authorities`)
 });
+
+export const getCurrentUser: ICrudGetAction<ICurrentUser> = () => {
+  const requestUrl = `/api/currentUser`;
+  return {
+    type: ACTION_TYPES.FETCH_CURRENT_USER,
+    payload: axios.get<ICurrentUser>(requestUrl)
+  };
+};
 
 export const getUser: ICrudGetAction<IUser> = id => {
   const requestUrl = `${apiUrl}/${id}`;

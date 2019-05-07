@@ -128,10 +128,6 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                 <th className="hand" onClick={this.sort('address')}>
                   <Translate contentKey="seekMeOutApp.place.address">Address</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={this.sort('possibleActivities')}>
-                  <Translate contentKey="seekMeOutApp.place.possibleActivities">Possible Activities</Translate>{' '}
-                  <FontAwesomeIcon icon="sort" />
-                </th>
                 <th className="hand" onClick={this.sort('phoneNumber')}>
                   <Translate contentKey="seekMeOutApp.place.phoneNumber">Phone Number</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -168,7 +164,6 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                     </Button>
                   </td>
                   <td>{place.address}</td>
-                  <td>{place.possibleActivities}</td>
                   <td>{place.phoneNumber}</td>
                   <td>{place.description}</td>
                   <td>{place.openHours}</td>

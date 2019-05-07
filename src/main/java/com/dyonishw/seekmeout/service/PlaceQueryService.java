@@ -96,9 +96,6 @@ public class PlaceQueryService extends QueryService<Place> {
             if (criteria.getAddress() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAddress(), Place_.address));
             }
-            if (criteria.getPossibleActivities() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPossibleActivities(), Place_.possibleActivities));
-            }
             if (criteria.getPhoneNumber() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhoneNumber(), Place_.phoneNumber));
             }

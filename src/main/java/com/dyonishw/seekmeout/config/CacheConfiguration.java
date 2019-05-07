@@ -48,6 +48,7 @@ public class CacheConfiguration {
             cm.createCache(com.dyonishw.seekmeout.domain.Place.class.getName() + ".activityPlaces", jcacheConfiguration);
             cm.createCache(com.dyonishw.seekmeout.domain.Place.class.getName() + ".placeEvents", jcacheConfiguration);
             cm.createCache(com.dyonishw.seekmeout.domain.Event.class.getName(), jcacheConfiguration);
+            cm.createCache(com.dyonishw.seekmeout.domain.Event.class.getName() + ".eventUsers", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

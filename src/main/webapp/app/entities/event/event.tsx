@@ -124,20 +124,15 @@ export class Event extends React.Component<IEventProps, IEventState> {
                 <th className="hand" onClick={this.sort('id')}>
                   <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
-                <th className="hand" onClick={this.sort('activityType')}>
-                  <Translate contentKey="seekMeOutApp.event.activityType">Activity Type</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={this.sort('takingPlaceAt')}>
-                  <Translate contentKey="seekMeOutApp.event.takingPlaceAt">Taking Place At</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={this.sort('peopleAttending')}>
-                  <Translate contentKey="seekMeOutApp.event.peopleAttending">People Attending</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
                 <th className="hand" onClick={this.sort('casual')}>
                   <Translate contentKey="seekMeOutApp.event.casual">Casual</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th className="hand" onClick={this.sort('hour')}>
                   <Translate contentKey="seekMeOutApp.event.hour">Hour</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th className="hand" onClick={this.sort('casualDescription')}>
+                  <Translate contentKey="seekMeOutApp.event.casualDescription">Casual Description</Translate>{' '}
+                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="seekMeOutApp.event.activityEvent">Activity Event</Translate> <FontAwesomeIcon icon="sort" />
@@ -156,13 +151,11 @@ export class Event extends React.Component<IEventProps, IEventState> {
                       {event.id}
                     </Button>
                   </td>
-                  <td>{event.activityType}</td>
-                  <td>{event.takingPlaceAt}</td>
-                  <td>{event.peopleAttending}</td>
                   <td>{event.casual ? 'true' : 'false'}</td>
                   <td>
                     <TextFormat type="date" value={event.hour} format={APP_LOCAL_DATE_FORMAT} />
                   </td>
+                  <td>{event.casualDescription}</td>
                   <td>{event.activityEventType ? <Link to={`activity/${event.activityEventId}`}>{event.activityEventType}</Link> : ''}</td>
                   <td>{event.placeEventName ? <Link to={`place/${event.placeEventId}`}>{event.placeEventName}</Link> : ''}</td>
                   <td className="text-right">

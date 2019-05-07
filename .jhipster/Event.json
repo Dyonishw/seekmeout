@@ -7,7 +7,7 @@
             "otherEntityName": "activity",
             "relationshipType": "many-to-one",
             "otherEntityField": "type",
-            "otherEntityRelationshipNameUndefined": true,
+            "otherEntityRelationshipNameUndefined": false,
             "otherEntityRelationshipName": "event"
         },
         {
@@ -15,23 +15,21 @@
             "otherEntityName": "place",
             "relationshipType": "many-to-one",
             "otherEntityField": "name",
-            "otherEntityRelationshipNameUndefined": true,
+            "otherEntityRelationshipNameUndefined": false,
             "otherEntityRelationshipName": "event"
+        },
+        {
+            "relationshipName": "eventUser",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "relationshipValidateRules": [],
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "event",
+            "otherEntityRelationshipNameUndefined": false
         }
     ],
     "fields": [
-        {
-            "fieldName": "activityType",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "takingPlaceAt",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "peopleAttending",
-            "fieldType": "String"
-        },
         {
             "fieldName": "casual",
             "fieldType": "Boolean",
@@ -45,6 +43,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "casualDescription",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20190408060336",

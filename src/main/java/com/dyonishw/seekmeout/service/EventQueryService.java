@@ -93,20 +93,14 @@ public class EventQueryService extends QueryService<Event> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildSpecification(criteria.getId(), Event_.id));
             }
-            if (criteria.getActivityType() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getActivityType(), Event_.activityType));
-            }
-            if (criteria.getTakingPlaceAt() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTakingPlaceAt(), Event_.takingPlaceAt));
-            }
-            if (criteria.getPeopleAttending() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPeopleAttending(), Event_.peopleAttending));
-            }
             if (criteria.getCasual() != null) {
                 specification = specification.and(buildSpecification(criteria.getCasual(), Event_.casual));
             }
             if (criteria.getHour() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getHour(), Event_.hour));
+            }
+            if (criteria.getCasualDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCasualDescription(), Event_.casualDescription));
             }
             if (criteria.getActivityEventId() != null) {
                 specification = specification.and(buildSpecification(criteria.getActivityEventId(),
@@ -115,6 +109,10 @@ public class EventQueryService extends QueryService<Event> {
             if (criteria.getPlaceEventId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPlaceEventId(),
                     root -> root.join(Event_.placeEvent, JoinType.LEFT).get(Place_.id)));
+            }
+            if (criteria.getEventUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getEventUserId(),
+                    root -> root.join(Event_.eventUsers, JoinType.LEFT).get(User_.id)));
             }
         }
         return specification;

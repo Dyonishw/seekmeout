@@ -12,6 +12,8 @@ import { IActivity } from 'app/shared/model/activity.model';
 import { getEntities as getActivities } from 'app/entities/activity/activity.reducer';
 import { IPlace } from 'app/shared/model/place.model';
 import { getEntities as getPlaces } from 'app/entities/place/place.reducer';
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './event.reducer';
 import { IEvent } from 'app/shared/model/event.model';
 // tslint:disable-next-line:no-unused-variable
@@ -22,6 +24,7 @@ export interface IEventUpdateProps extends StateProps, DispatchProps, RouteCompo
 
 export interface IEventUpdateState {
   isNew: boolean;
+  idseventUser: any[];
   activityEventId: string;
   placeEventId: string;
 }
@@ -30,6 +33,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
   constructor(props) {
     super(props);
     this.state = {
+      idseventUser: [],
       activityEventId: '0',
       placeEventId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -51,6 +55,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
 
     this.props.getActivities();
     this.props.getPlaces();
+    this.props.getUsers();
   }
 
   saveEntity = (event, errors, values) => {
@@ -58,7 +63,8 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
       const { eventEntity } = this.props;
       const entity = {
         ...eventEntity,
-        ...values
+        ...values,
+        eventUsers: mapIdList(values.eventUsers)
       };
 
       if (this.state.isNew) {
@@ -74,7 +80,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
   };
 
   render() {
-    const { eventEntity, activities, places, loading, updating } = this.props;
+    const { eventEntity, activities, places, users, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -101,24 +107,6 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                   </AvGroup>
                 ) : null}
                 <AvGroup>
-                  <Label id="activityTypeLabel" for="activityType">
-                    <Translate contentKey="seekMeOutApp.event.activityType">Activity Type</Translate>
-                  </Label>
-                  <AvField id="event-activityType" type="text" name="activityType" />
-                </AvGroup>
-                <AvGroup>
-                  <Label id="takingPlaceAtLabel" for="takingPlaceAt">
-                    <Translate contentKey="seekMeOutApp.event.takingPlaceAt">Taking Place At</Translate>
-                  </Label>
-                  <AvField id="event-takingPlaceAt" type="text" name="takingPlaceAt" />
-                </AvGroup>
-                <AvGroup>
-                  <Label id="peopleAttendingLabel" for="peopleAttending">
-                    <Translate contentKey="seekMeOutApp.event.peopleAttending">People Attending</Translate>
-                  </Label>
-                  <AvField id="event-peopleAttending" type="text" name="peopleAttending" />
-                </AvGroup>
-                <AvGroup>
                   <Label id="casualLabel" check>
                     <AvInput id="event-casual" type="checkbox" className="form-control" name="casual" />
                     <Translate contentKey="seekMeOutApp.event.casual">Casual</Translate>
@@ -137,6 +125,12 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                       required: { value: true, errorMessage: translate('entity.validation.required') }
                     }}
                   />
+                </AvGroup>
+                <AvGroup>
+                  <Label id="casualDescriptionLabel" for="casualDescription">
+                    <Translate contentKey="seekMeOutApp.event.casualDescription">Casual Description</Translate>
+                  </Label>
+                  <AvField id="event-casualDescription" type="text" name="casualDescription" />
                 </AvGroup>
                 <AvGroup>
                   <Label for="activityEvent.type">
@@ -168,6 +162,28 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                       : null}
                   </AvInput>
                 </AvGroup>
+                <AvGroup>
+                  <Label for="users">
+                    <Translate contentKey="seekMeOutApp.event.eventUser">Event User</Translate>
+                  </Label>
+                  <AvInput
+                    id="event-eventUser"
+                    type="select"
+                    multiple
+                    className="form-control"
+                    name="eventUsers"
+                    value={eventEntity.eventUsers && eventEntity.eventUsers.map(e => e.id)}
+                  >
+                    <option value="" key="0" />
+                    {users
+                      ? users.map(otherEntity => (
+                          <option value={otherEntity.id} key={otherEntity.id}>
+                            {otherEntity.login}
+                          </option>
+                        ))
+                      : null}
+                  </AvInput>
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/event" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
                   <span className="d-none d-md-inline">
@@ -191,6 +207,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
 const mapStateToProps = (storeState: IRootState) => ({
   activities: storeState.activity.entities,
   places: storeState.place.entities,
+  users: storeState.userManagement.users,
   eventEntity: storeState.event.entity,
   loading: storeState.event.loading,
   updating: storeState.event.updating,
@@ -200,6 +217,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getActivities,
   getPlaces,
+  getUsers,
   getEntity,
   updateEntity,
   createEntity,

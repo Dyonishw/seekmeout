@@ -73,7 +73,6 @@ class PlaceGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "address":"SAMPLE_TEXT"
-                , "possibleActivities":"SAMPLE_TEXT"
                 , "phoneNumber":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "openHours":"SAMPLE_TEXT"

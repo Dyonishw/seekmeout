@@ -20,5 +20,16 @@
                                  referencedColumnNames="id"
                                  referencedTableName="place"/>
 
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="event_event_user"
+                                 constraintName="fk_event_event_user_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
+        <addForeignKeyConstraint baseColumnNames="event_user_id"
+                                 baseTableName="event_event_user"
+                                 constraintName="fk_event_event_user_event_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+        
     </changeSet>
 </databaseChangeLog>

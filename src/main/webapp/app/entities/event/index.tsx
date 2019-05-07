@@ -7,12 +7,15 @@ import Event from './event';
 import EventDetail from './event-detail';
 import EventUpdate from './event-update';
 import EventDeleteDialog from './event-delete-dialog';
+import UserProfile from './user-profile';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={EventUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={EventUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.url}/currentUser`} component={EventDetail} />
+      <ErrorBoundaryRoute exact path={`${match.url}/attending/:login`} component={UserProfile} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={EventDetail} />
       <ErrorBoundaryRoute path={match.url} component={Event} />
     </Switch>

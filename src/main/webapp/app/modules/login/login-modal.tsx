@@ -71,7 +71,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
               <span>
                 <Translate contentKey="global.messages.info.register.noaccount">You don't have an account yet?</Translate>
               </span>{' '}
-              <Link to="/register">
+              <Link to="/register-place">
                 <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
               </Link>
             </Alert>

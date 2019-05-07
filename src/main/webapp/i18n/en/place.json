@@ -17,7 +17,6 @@
         "title": "Place"
       },
       "address": "Address",
-      "possibleActivities": "Possible Activities",
       "phoneNumber": "Phone Number",
       "description": "Description",
       "openHours": "Open Hours",

@@ -4,7 +4,6 @@ import { IEvent } from 'app/shared/model/event.model';
 export interface IPlace {
   id?: number;
   address?: string;
-  possibleActivities?: string;
   phoneNumber?: string;
   description?: string;
   openHours?: string;
