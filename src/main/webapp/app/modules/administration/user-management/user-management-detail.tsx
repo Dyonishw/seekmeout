@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { languages } from 'app/config/translation';
-import { getUser, getCurrentUser } from './user-management.reducer';
+import { getUser } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 
 export interface IUserManagementDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
@@ -15,11 +15,10 @@ export interface IUserManagementDetailProps extends StateProps, DispatchProps, R
 export class UserManagementDetail extends React.Component<IUserManagementDetailProps> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
-    this.props.getCurrentUser();
   }
 
   render() {
-    const { user, currentUser } = this.props;
+    const { user } = this.props;
     return (
       <div>
         <h2>
@@ -92,12 +91,6 @@ export class UserManagementDetail extends React.Component<IUserManagementDetailP
                   : null}
               </ul>
             </dd>
-            <dt>
-              <Translate contentKey="userManagement.currentUser">The current user is:</Translate>
-            </dt>
-            <dd>
-              {currentUser.login ? currentUser.login : ''}
-            </dd>
           </dl>
         </Row>
         <Button tag={Link} to="/admin/user-management" replace color="info">
@@ -112,11 +105,10 @@ export class UserManagementDetail extends React.Component<IUserManagementDetailP
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  user: storeState.userManagement.user,
-  currentUser: storeState.userManagement.currentUser
+  user: storeState.userManagement.user
 });
 
-const mapDispatchToProps = { getUser, getCurrentUser };
+const mapDispatchToProps = { getUser };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

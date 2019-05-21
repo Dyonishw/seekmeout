@@ -10,6 +10,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IActivity } from 'app/shared/model/activity.model';
 import { getEntities as getActivities } from 'app/entities/activity/activity.reducer';
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './place.reducer';
 import { IPlace } from 'app/shared/model/place.model';
 // tslint:disable-next-line:no-unused-variable
@@ -21,6 +23,7 @@ export interface IPlaceUpdateProps extends StateProps, DispatchProps, RouteCompo
 export interface IPlaceUpdateState {
   isNew: boolean;
   idsactivityPlace: any[];
+  rolePlaceUserId: string;
 }
 
 export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdateState> {
@@ -28,6 +31,7 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
     super(props);
     this.state = {
       idsactivityPlace: [],
+      rolePlaceUserId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,6 +50,7 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
     }
 
     this.props.getActivities();
+    this.props.getUsers();
   }
 
   onBlobChange = (isAnImage, name) => event => {
@@ -73,12 +78,16 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
     }
   };
 
+  redirectToCreate = () => {
+    this.props.history.push('/register-place');
+  }
+
   handleClose = () => {
-    this.props.history.push('/entity/place');
+    this.props.history.goBack();
   };
 
   render() {
-    const { placeEntity, activities, loading, updating } = this.props;
+    const { placeEntity, activities, users, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { pictures, picturesContentType } = placeEntity;
@@ -254,6 +263,21 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
                       : null}
                   </AvInput>
                 </AvGroup>
+                <AvGroup>
+                  <Label for="rolePlaceUser.login">
+                    <Translate contentKey="seekMeOutApp.place.rolePlaceUser">Role Place User</Translate>
+                  </Label>
+                  <AvInput id="place-rolePlaceUser" type="select" className="form-control" name="rolePlaceUserId">
+                    <option value="" key="0" />
+                    {users
+                      ? users.map(otherEntity => (
+                          <option value={otherEntity.id} key={otherEntity.id}>
+                            {otherEntity.login}
+                          </option>
+                        ))
+                      : null}
+                  </AvInput>
+                </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/place" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
                   <span className="d-none d-md-inline">
@@ -276,6 +300,7 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
 
 const mapStateToProps = (storeState: IRootState) => ({
   activities: storeState.activity.entities,
+  users: storeState.userManagement.users,
   placeEntity: storeState.place.entity,
   loading: storeState.place.loading,
   updating: storeState.place.updating,
@@ -284,6 +309,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getActivities,
+  getUsers,
   getEntity,
   updateEntity,
   setBlob,

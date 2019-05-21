@@ -8,11 +8,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Place and its DTO PlaceDTO.
  */
-@Mapper(componentModel = "spring", uses = {ActivityMapper.class})
+@Mapper(componentModel = "spring", uses = {ActivityMapper.class, UserMapper.class})
 public interface PlaceMapper extends EntityMapper<PlaceDTO, Place> {
 
+    @Mapping(source = "rolePlaceUser.id", target = "rolePlaceUserId")
+    @Mapping(source = "rolePlaceUser.login", target = "rolePlaceUserLogin")
+    PlaceDTO toDto(Place place);
 
     @Mapping(target = "placeEvents", ignore = true)
+    @Mapping(source = "rolePlaceUserId", target = "rolePlaceUser")
     Place toEntity(PlaceDTO placeDTO);
 
     default Place fromId(Long id) {

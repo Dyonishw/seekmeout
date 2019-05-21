@@ -5,7 +5,6 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IEvent, defaultValue } from 'app/shared/model/event.model';
-import { ICurrentUser, defaultCurrentUser } from 'app/shared/model/user.model';
 
 export const ACTION_TYPES = {
   SEARCH_EVENTS: 'event/SEARCH_EVENTS',
@@ -25,8 +24,7 @@ const initialState = {
   entity: defaultValue,
   updating: false,
   totalItems: 0,
-  updateSuccess: false,
-  currentUser: defaultCurrentUser
+  updateSuccess: false
 };
 
 export type EventState = Readonly<typeof initialState>;
@@ -89,13 +87,6 @@ export default (state: EventState = initialState, action): EventState => {
         loading: false,
         entity: action.payload.data
       };
-    case SUCCESS(ACTION_TYPES.FETCH_CURRENT_USER):
-      return {
-        ...state,
-        loading: false,
-        currentUser: action.payload.data
-      };
-
     case SUCCESS(ACTION_TYPES.CREATE_EVENT):
     case SUCCESS(ACTION_TYPES.UPDATE_EVENT):
       return {
@@ -172,14 +163,6 @@ export const deleteEntity: ICrudDeleteAction<IEvent> = id => async dispatch => {
   });
   dispatch(getEntities());
   return result;
-};
-
-export const getCurrentUser: ICrudGetAction<ICurrentUser> = () => {
-  const requestUrl = `/api/currentUser`;
-  return {
-    type: ACTION_TYPES.FETCH_CURRENT_USER,
-    payload: axios.get<ICurrentUser>(requestUrl)
-  };
 };
 
 export const reset = () => ({

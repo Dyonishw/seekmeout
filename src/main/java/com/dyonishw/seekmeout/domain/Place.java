@@ -21,15 +21,10 @@ import java.util.Objects;
 @Table(name = "place")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "place")
-public class Place implements Serializable {
+public class Place extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-//    @SequenceGenerator(name = "sequenceGenerator")
-//    private Long id;
-
     @Id
     private Long id;
 
@@ -84,9 +79,10 @@ public class Place implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> placeEvents = new HashSet<>();
 
-    // TODO: Added this manually to implement ROLE_PLACE user controlling the Place entity
-    @OneToOne(mappedBy = "placeUser")
-    private User placeRoleUser;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @MapsId
+    @JoinColumn(name = "id")
+    private User rolePlaceUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -277,20 +273,18 @@ public class Place implements Serializable {
         this.placeEvents = events;
     }
 
-    // TODO: manually implemented getters and setters
-    public User getPlaceRoleUser() {
-        return placeRoleUser;
+    public User getRolePlaceUser() {
+        return rolePlaceUser;
     }
 
-    public Place placeRoleUser(User user) {
-        this.placeRoleUser = user;
+    public Place rolePlaceUser(User user) {
+        this.rolePlaceUser = user;
         return this;
     }
 
-    public void setPlaceRoleUser(User user) {
-        this.placeRoleUser = user;
+    public void setRolePlaceUser(User user) {
+        this.rolePlaceUser = user;
     }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

@@ -3,6 +3,7 @@ package com.dyonishw.seekmeout.service.impl;
 import com.dyonishw.seekmeout.service.PlaceService;
 import com.dyonishw.seekmeout.domain.Place;
 import com.dyonishw.seekmeout.repository.PlaceRepository;
+import com.dyonishw.seekmeout.repository.UserRepository;
 import com.dyonishw.seekmeout.repository.search.PlaceSearchRepository;
 import com.dyonishw.seekmeout.service.dto.PlaceDTO;
 import com.dyonishw.seekmeout.service.mapper.PlaceMapper;
@@ -33,10 +34,13 @@ public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceSearchRepository placeSearchRepository;
 
-    public PlaceServiceImpl(PlaceRepository placeRepository, PlaceMapper placeMapper, PlaceSearchRepository placeSearchRepository) {
+    private final UserRepository userRepository;
+
+    public PlaceServiceImpl(PlaceRepository placeRepository, PlaceMapper placeMapper, PlaceSearchRepository placeSearchRepository, UserRepository userRepository) {
         this.placeRepository = placeRepository;
         this.placeMapper = placeMapper;
         this.placeSearchRepository = placeSearchRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -49,6 +53,10 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceDTO save(PlaceDTO placeDTO) {
         log.debug("Request to save Place : {}", placeDTO);
         Place place = placeMapper.toEntity(placeDTO);
+        long userId = placeDTO.getRolePlaceUserId();
+        // TODO: Uncomment this line
+//        userRepository.findById(userId).ifPresent(place::user);
+        userRepository.findById(userId).ifPresent(place::setRolePlaceUser);
         place = placeRepository.save(place);
         PlaceDTO result = placeMapper.toDto(place);
         placeSearchRepository.save(place);

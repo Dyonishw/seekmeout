@@ -21,8 +21,7 @@
       "casualDescription": "Casual Description",
       "activityEvent": "Activity Event",
       "placeEvent": "Place Event",
-      "eventUser": "Event User",
-      "currentUser": "The current user is:"
+      "eventUser": "Event User"
     }
   }
 }

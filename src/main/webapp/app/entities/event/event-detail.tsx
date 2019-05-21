@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, updateEntity } from './event.reducer';
-import { getCurrentUser } from 'app/modules/administration/user-management/user-management.reducer.ts';
 import { IEvent } from 'app/shared/model/event.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
@@ -21,22 +20,10 @@ export class EventDetail extends React.Component<IEventDetailProps> {
 
   componentDidMount() {
     this.props.getEntity(this.props.match.params.id);
-    this.props.getCurrentUser();
   }
-  // TODO: Works, but it's ugly => Fix it
-  // TODO: make eventEntity.eventUsers update
-  addCurrentUser = () => {
-    const { eventEntity } = this.props;
-
-    const entity = {
-      ...eventEntity,
-      eventUsers: this.props.eventEntity.eventUsers.concat(this.props.currentUser);
-    };
-    this.props.updateEntity(entity);
-  };
 
   render() {
-    const { eventEntity, currentUser, loading, updating } = this.props;
+    const { eventEntity, loading, updating } = this.props;
     return (
       <Row>
         <Col md="8">
@@ -85,12 +72,6 @@ export class EventDetail extends React.Component<IEventDetailProps> {
                   ))
                 : null}{' '}
             </dd>
-            <dt>
-              <Translate contentKey="userManagement.currentUser">The current user is:</Translate>
-            </dt>
-            <dd>
-              { currentUser.login ? currentUser.login : ''}
-            </dd>
           </dl>
           <Button tag={Link} to="/entity/event" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}
@@ -104,15 +85,6 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <Translate contentKey="entity.action.edit">Edit</Translate>
             </span>
           </Button>
-          <Button type="reset" className="input-group-addon" onClick={this.addCurrentUser}>
-            <FontAwesomeIcon icon="trash" />
-          </Button>
-          <Button type="button" className="input-group-addon" onClick={this.addCurrentUser}>
-            <FontAwesomeIcon icon="trash" />
-            <span className="d-none d-md-inline">
-              <Translate contentKey="entity.action.attend">Attend this event</Translate>
-            </span>
-          </Button>
         </Col>
       </Row>
     );
@@ -121,13 +93,12 @@ export class EventDetail extends React.Component<IEventDetailProps> {
 
 const mapStateToProps = ({ event }: IRootState) => ({
   eventEntity: event.entity,
-  currentUser: event.currentUser,
   loading: event.loading,
   updating: event.updating,
   updateSuccess: event.updateSuccess
 });
 
-const mapDispatchToProps = { getEntity, getCurrentUser, updateEntity };
+const mapDispatchToProps = { getEntity, updateEntity };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

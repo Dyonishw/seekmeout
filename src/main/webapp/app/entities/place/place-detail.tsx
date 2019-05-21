@@ -106,6 +106,10 @@ export class PlaceDetail extends React.Component<IPlaceDetailProps> {
                   ))
                 : null}
             </dd>
+            <dt>
+              <Translate contentKey="seekMeOutApp.place.rolePlaceUser">Role Place User</Translate>
+            </dt>
+            <dd>{placeEntity.rolePlaceUserLogin ? placeEntity.rolePlaceUserLogin : ''}</dd>
           </dl>
           <Button tag={Link} to="/entity/place" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}

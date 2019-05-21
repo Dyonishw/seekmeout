@@ -96,12 +96,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    // TODO: Trying to implement relationship between Place and ROLE_PLACE user
-    @OneToOne
-    @JoinTable(name = "place_role_place",
-        joinColumns = { @JoinColumn (name = "role_place_id", referencedColumnName = "id")},
-        inverseJoinColumns = { @JoinColumn (name = "place_id", referencedColumnName = "id")})
-    private Place placeUser;
+    //    // TODO: Trying to implement relationship between Place and ROLE_PLACE user
+//    @OneToOne
+//    @JoinTable(name = "place_role_place",
+//        joinColumns = { @JoinColumn (name = "role_place_id", referencedColumnName = "id")},
+//        inverseJoinColumns = { @JoinColumn (name = "place_id", referencedColumnName = "id")})
+//    private Place placeUser;
 
     public Long getId() {
         return id;
@@ -209,19 +209,18 @@ public class User extends AbstractAuditingEntity implements Serializable {
     }
 
     // TODO: manually implemented getters and setters
-    public Place getPlaceUser() {
-        return placeUser;
-    }
-
-    public User placeEvent(Place place) {
-        this.placeUser = place;
-        return this;
-    }
-
-    public void setPlaceEvent(Place place) {
-        this.placeUser = place;
-    }
-
+//    public Place getPlaceUser() {
+//        return placeUser;
+//    }
+//
+//    public User placeEvent(Place place) {
+//        this.placeUser = place;
+//        return this;
+//    }
+//
+//    public void setPlaceEvent(Place place) {
+//        this.placeUser = place;
+//    }
 
     @Override
     public boolean equals(Object o) {

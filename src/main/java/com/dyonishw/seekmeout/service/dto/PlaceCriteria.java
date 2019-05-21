@@ -44,6 +44,8 @@ public class PlaceCriteria implements Serializable {
 
     private LongFilter placeEventId;
 
+    private LongFilter rolePlaceUserId;
+
     public LongFilter getId() {
         return id;
     }
@@ -132,6 +134,14 @@ public class PlaceCriteria implements Serializable {
         this.placeEventId = placeEventId;
     }
 
+    public LongFilter getRolePlaceUserId() {
+        return rolePlaceUserId;
+    }
+
+    public void setRolePlaceUserId(LongFilter rolePlaceUserId) {
+        this.rolePlaceUserId = rolePlaceUserId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -153,7 +163,8 @@ public class PlaceCriteria implements Serializable {
             Objects.equals(contactForm, that.contactForm) &&
             Objects.equals(facilities, that.facilities) &&
             Objects.equals(activityPlaceId, that.activityPlaceId) &&
-            Objects.equals(placeEventId, that.placeEventId);
+            Objects.equals(placeEventId, that.placeEventId) &&
+            Objects.equals(rolePlaceUserId, that.rolePlaceUserId);
     }
 
     @Override
@@ -169,7 +180,8 @@ public class PlaceCriteria implements Serializable {
         contactForm,
         facilities,
         activityPlaceId,
-        placeEventId
+        placeEventId,
+        rolePlaceUserId
         );
     }
 
@@ -187,6 +199,7 @@ public class PlaceCriteria implements Serializable {
                 (facilities != null ? "facilities=" + facilities + ", " : "") +
                 (activityPlaceId != null ? "activityPlaceId=" + activityPlaceId + ", " : "") +
                 (placeEventId != null ? "placeEventId=" + placeEventId + ", " : "") +
+                (rolePlaceUserId != null ? "rolePlaceUserId=" + rolePlaceUserId + ", " : "") +
             "}";
     }
 

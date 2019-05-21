@@ -73,15 +73,12 @@ public class UserResource {
 
     private final UserSearchRepository userSearchRepository;
 
-//    private final SecurityUtils securityUtils;
-
     public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository) {
 
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.userSearchRepository = userSearchRepository;
-//        this.securityUtils = securityUtils;
     }
 
     /**
@@ -171,24 +168,6 @@ public class UserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-//    /**
-//     * GET /users : get all users.
-//     *
-//     * @param pageable the pagination information
-//     * @return the ResponseEntity with status 200 (OK) and with body all users
-//     */
-//    @GetMapping("/users")
-//    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-//
-//        final Page<UserDTO> page = userService.getUserWithAuthorities();
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-//        return new ResponseEntity<>(page, headers, HttpStatus.OK);
-//    }
-
-
-
-
-
     /**
      * @return a string list of the all of the roles
      */
@@ -212,6 +191,7 @@ public class UserResource {
                 .map(UserDTO::new));
     }
 
+    // TODO: remove this
     /**
      * Get /currentUser : get current user logged in
      *

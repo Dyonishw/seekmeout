@@ -15,6 +15,8 @@ export interface IPlace {
   facilities?: string;
   activityPlaces?: IActivity[];
   placeEvents?: IEvent[];
+  rolePlaceUserLogin?: string;
+  rolePlaceUserId?: number;
 }
 
 export const defaultValue: Readonly<IPlace> = {};

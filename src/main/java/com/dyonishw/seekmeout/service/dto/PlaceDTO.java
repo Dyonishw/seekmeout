@@ -1,6 +1,7 @@
 package com.dyonishw.seekmeout.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -44,6 +45,19 @@ public class PlaceDTO implements Serializable {
 
 
     private Set<ActivityDTO> activityPlaces = new HashSet<>();
+
+    private Long rolePlaceUserId;
+
+    private String rolePlaceUserLogin;
+
+    // TODO: added by me
+    private String createdBy;
+
+//    private Instant createdDate;
+
+    private String lastModifiedBy;
+
+//    private Instant lastModifiedDate;
 
     public Long getId() {
         return id;
@@ -141,6 +155,55 @@ public class PlaceDTO implements Serializable {
         this.activityPlaces = activities;
     }
 
+    public Long getRolePlaceUserId() {
+        return rolePlaceUserId;
+    }
+
+    public void setRolePlaceUserId(Long userId) {
+        this.rolePlaceUserId = userId;
+    }
+
+    public String getRolePlaceUserLogin() {
+        return rolePlaceUserLogin;
+    }
+
+    public void setRolePlaceUserLogin(String userLogin) {
+        this.rolePlaceUserLogin = userLogin;
+    }
+
+    // TODO: Getters and setters added by me
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+//    public Instant getCreatedDate() {
+//        return createdDate;
+//    }
+
+//    public void setCreatedDate(Instant createdDate) {
+//        this.createdDate = createdDate;
+//    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+//    public Instant getLastModifiedDate() {
+//        return lastModifiedDate;
+//    }
+
+//    public void setLastModifiedDate(Instant lastModifiedDate) {
+//        this.lastModifiedDate = lastModifiedDate;
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -162,6 +225,7 @@ public class PlaceDTO implements Serializable {
         return Objects.hashCode(getId());
     }
 
+    // TODO: Some added by me
     @Override
     public String toString() {
         return "PlaceDTO{" +
@@ -175,6 +239,12 @@ public class PlaceDTO implements Serializable {
             ", contactForm='" + getContactForm() + "'" +
             ", pictures='" + getPictures() + "'" +
             ", facilities='" + getFacilities() + "'" +
+            ", rolePlaceUser=" + getRolePlaceUserId() +
+            ", rolePlaceUser='" + getRolePlaceUserLogin() + "'" +
+            ", createdBy=" + createdBy +
+//            ", createdDate=" + createdDate +
+            ", lastModifiedBy='" + lastModifiedBy + '\'' +
+//            ", lastModifiedDate=" + lastModifiedDate +
             "}";
     }
 }

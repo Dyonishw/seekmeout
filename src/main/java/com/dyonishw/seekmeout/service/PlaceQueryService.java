@@ -125,6 +125,10 @@ public class PlaceQueryService extends QueryService<Place> {
                 specification = specification.and(buildSpecification(criteria.getPlaceEventId(),
                     root -> root.join(Place_.placeEvents, JoinType.LEFT).get(Event_.id)));
             }
+            if (criteria.getRolePlaceUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getRolePlaceUserId(),
+                    root -> root.join(Place_.rolePlaceUser, JoinType.LEFT).get(User_.id)));
+            }
         }
         return specification;
     }

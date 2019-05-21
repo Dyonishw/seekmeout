@@ -25,7 +25,6 @@
     "createdBy": "Created by",
     "createdDate": "Created date",
     "lastModifiedBy": "Modified by",
-    "lastModifiedDate": "Modified date",
-    "currentUser": "The current user is:"
+    "lastModifiedDate": "Modified date"
   }
 }

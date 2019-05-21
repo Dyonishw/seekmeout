@@ -18,6 +18,16 @@
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "placeEvent",
             "otherEntityRelationshipNameUndefined": false
+        },
+        {
+            "relationshipName": "rolePlaceUser",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "useJPADerivedIdentifier": true,
+            "otherEntityRelationshipName": "place",
+            "otherEntityRelationshipNameUndefined": false
         }
     ],
     "fields": [

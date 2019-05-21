@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -58,6 +59,9 @@ public class PlaceResource {
         log.debug("REST request to save Place : {}", placeDTO);
         if (placeDTO.getId() != null) {
             throw new BadRequestAlertException("A new place cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (Objects.isNull(placeDTO.getRolePlaceUserId())) {
+            throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
         PlaceDTO result = placeService.save(placeDTO);
         return ResponseEntity.created(new URI("/api/places/" + result.getId()))

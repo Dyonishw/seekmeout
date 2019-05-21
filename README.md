@@ -1,6 +1,9 @@
 # SeekMeOut
 
-This application was generated using JHipster 5.8.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.8.2](https://www.jhipster.tech/documentation-archive/v5.8.2).
+SeekMeOut is a personal project that is intented to facilitate finding people with which you can play sports casually.
+It is a WIP and it uses PostgreSQL, Java, Spring framework, Hibernate, liquibase, JS, React/Redux, Typescript.
+
+This application was generated using JHipster 5.8.2.
 
 ## Development
 

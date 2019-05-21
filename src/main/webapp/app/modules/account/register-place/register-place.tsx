@@ -3,6 +3,7 @@ import { Translate, translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
+import { Redirect, Link } from 'react-router-dom';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { IRootState } from 'app/shared/reducers';
@@ -24,6 +25,7 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
   }
 
   handleValidSubmit = (event, values) => {
+    alert(values.openHours);
     this.props.handlePlaceRegister(values.username, values.email, values.firstPassword, this.props.currentLocale);
     event.preventDefault();
   };
@@ -31,6 +33,10 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
   updatePassword = event => {
     this.setState({ password: event.target.value });
   };
+
+  redirectToCreate = () => {
+    this.props.history.push('/entity/place/new');
+  }
 
   render() {
     return (
@@ -92,7 +98,15 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
                   match: { value: 'firstPassword', errorMessage: translate('global.messages.error.dontmatch') }
                 }}
               />
-              <Button id="register-submit" color="primary" type="submit">
+              <AvField
+                id="place-openHours"
+                type="text"
+                name="openHours"
+                validate={{
+                  required: { value: true, errorMessage: translate('entity.validation.required') }
+                }}
+              />
+              <Button id="register-submit" color="primary" type="submit" onClick={this.redirectToCreate}>
                 <Translate contentKey="register.form.button">Register</Translate>
               </Button>
             </AvForm>

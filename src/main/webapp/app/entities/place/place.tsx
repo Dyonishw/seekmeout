@@ -152,6 +152,9 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                 <th className="hand" onClick={this.sort('facilities')}>
                   <Translate contentKey="seekMeOutApp.place.facilities">Facilities</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                <th>
+                  <Translate contentKey="seekMeOutApp.place.rolePlaceUser">Role Place User</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
                 <th />
               </tr>
             </thead>
@@ -184,6 +187,7 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                     ) : null}
                   </td>
                   <td>{place.facilities}</td>
+                  <td>{place.rolePlaceUserLogin ? place.rolePlaceUserLogin : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${place.id}`} color="info" size="sm">
