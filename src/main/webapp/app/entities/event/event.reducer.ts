@@ -21,6 +21,7 @@ const initialState = {
   loading: false,
   errorMessage: null,
   entities: [] as ReadonlyArray<IEvent>,
+  account: {} as any,
   entity: defaultValue,
   updating: false,
   totalItems: 0,

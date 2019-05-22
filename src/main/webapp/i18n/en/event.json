@@ -14,7 +14,8 @@
         "question": "Are you sure you want to delete Event {{ id }}?"
       },
       "detail": {
-        "title": "Event"
+        "title": "Event",
+        "account": "Your username is: "
       },
       "casual": "Casual",
       "hour": "Hour",

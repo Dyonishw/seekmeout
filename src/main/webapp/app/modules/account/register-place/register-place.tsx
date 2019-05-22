@@ -25,7 +25,6 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
   }
 
   handleValidSubmit = (event, values) => {
-    alert(values.openHours);
     this.props.handlePlaceRegister(values.username, values.email, values.firstPassword, this.props.currentLocale);
     event.preventDefault();
   };

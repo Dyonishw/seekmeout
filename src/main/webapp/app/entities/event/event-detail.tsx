@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, updateEntity } from './event.reducer';
+import { getSession } from 'app/shared/reducers/authentication';
+
 import { IEvent } from 'app/shared/model/event.model';
 // tslint:disable-next-line:no-unused-variable
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
@@ -19,11 +21,22 @@ export interface IEventDetailProps extends StateProps, DispatchProps, RouteCompo
 export class EventDetail extends React.Component<IEventDetailProps> {
 
   componentDidMount() {
+    this.props.getSession();
     this.props.getEntity(this.props.match.params.id);
   }
 
+  addAccount = () => {
+    const { eventEntity } = this.props;
+
+    const entity = {
+      ...eventEntity,
+      eventUsers: this.props.eventEntity.eventUsers.concat(this.props.account);
+    };
+    this.props.updateEntity(entity);
+  };
+
   render() {
-    const { eventEntity, loading, updating } = this.props;
+    const { eventEntity, account, loading, updating } = this.props;
     return (
       <Row>
         <Col md="8">
@@ -72,6 +85,12 @@ export class EventDetail extends React.Component<IEventDetailProps> {
                   ))
                 : null}{' '}
             </dd>
+            <dt>
+              <Translate contentKey="seekMeOutApp.event.detail.account">Your username is: </Translate>
+            </dt>
+            <dd>
+              { account.login ? account.login : ''}
+            </dd>
           </dl>
           <Button tag={Link} to="/entity/event" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />{' '}
@@ -85,20 +104,27 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <Translate contentKey="entity.action.edit">Edit</Translate>
             </span>
           </Button>
+          <Button type="button" className="input-group-addon" onClick={this.addAccount}>
+            <FontAwesomeIcon icon="user-check" />
+            <span className="d-none d-md-inline">
+              <Translate contentKey="entity.action.attend">Attend this event</Translate>
+            </span>
+          </Button>
         </Col>
       </Row>
     );
   }
 }
 
-const mapStateToProps = ({ event }: IRootState) => ({
+const mapStateToProps = ({ authentication, event }: IRootState) => ({
+  account: authentication.account,
   eventEntity: event.entity,
   loading: event.loading,
   updating: event.updating,
   updateSuccess: event.updateSuccess
 });
 
-const mapDispatchToProps = { getEntity, updateEntity };
+const mapDispatchToProps = { getEntity, updateEntity, getSession };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
