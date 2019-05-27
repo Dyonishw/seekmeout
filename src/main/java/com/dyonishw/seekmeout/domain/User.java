@@ -208,20 +208,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
-    // TODO: manually implemented getters and setters
-//    public Place getPlaceUser() {
-//        return placeUser;
-//    }
-//
-//    public User placeEvent(Place place) {
-//        this.placeUser = place;
-//        return this;
-//    }
-//
-//    public void setPlaceEvent(Place place) {
-//        this.placeUser = place;
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

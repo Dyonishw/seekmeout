@@ -28,7 +28,12 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
     this.props.handlePlaceRegister(values.username, values.email, values.firstPassword, this.props.currentLocale);
     event.preventDefault();
   };
-
+  
+  componentDidUpdate(prevProps: IRegisterProps, prevState) {
+    if ((this.props !== prevProps) && (this.props.registrationSuccess === true)) {
+      this.redirectToCreate();
+    }
+  }
   updatePassword = event => {
     this.setState({ password: event.target.value });
   };
@@ -97,15 +102,7 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
                   match: { value: 'firstPassword', errorMessage: translate('global.messages.error.dontmatch') }
                 }}
               />
-              <AvField
-                id="place-openHours"
-                type="text"
-                name="openHours"
-                validate={{
-                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                }}
-              />
-              <Button id="register-submit" color="primary" type="submit" onClick={this.redirectToCreate}>
+              <Button id="register-submit" color="primary" type="submit">
                 <Translate contentKey="register.form.button">Register</Translate>
               </Button>
             </AvForm>
@@ -132,8 +129,10 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
   }
 }
 
-const mapStateToProps = ({ locale }: IRootState) => ({
-  currentLocale: locale.currentLocale
+const mapStateToProps = ({ locale, registerPlace }: IRootState) => ({
+  currentLocale: locale.currentLocale,
+  cacheLogin: registerPlace.cacheLogin,
+  registrationSuccess: registerPlace.registrationSuccess
 });
 
 const mapDispatchToProps = { handlePlaceRegister, reset };

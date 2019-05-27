@@ -100,17 +100,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
-            // TODO: the next line might prove problematic
             .antMatchers("/api/account").permitAll()
-            // TODO: the next line is changed from register to register-place
             .antMatchers("/api/register-place").permitAll()
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
-            // TODO: Modification here
-//            .antMatchers("/api/users").permitAll()
+            .antMatchers("/api/users").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/places").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/places").permitAll()
+            .antMatchers(HttpMethod.GET,"/api/activities").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()

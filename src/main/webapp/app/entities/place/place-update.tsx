@@ -11,7 +11,7 @@ import { IRootState } from 'app/shared/reducers';
 import { IActivity } from 'app/shared/model/activity.model';
 import { getEntities as getActivities } from 'app/entities/activity/activity.reducer';
 import { IUser } from 'app/shared/model/user.model';
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { getUsers, getUserByLogin} from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './place.reducer';
 import { IPlace } from 'app/shared/model/place.model';
 // tslint:disable-next-line:no-unused-variable
@@ -51,6 +51,7 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
 
     this.props.getActivities();
     this.props.getUsers();
+    this.props.getUserByLogin(this.props.cacheLogin);
   }
 
   onBlobChange = (isAnImage, name) => event => {
@@ -69,7 +70,6 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
         ...values,
         activityPlaces: mapIdList(values.activityPlaces)
       };
-
       if (this.state.isNew) {
         this.props.createEntity(entity);
       } else {
@@ -78,18 +78,13 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
     }
   };
 
-  redirectToCreate = () => {
-    this.props.history.push('/register-place');
-  }
-
   handleClose = () => {
     this.props.history.goBack();
   };
 
   render() {
-    const { placeEntity, activities, users, loading, updating } = this.props;
+    const { placeEntity, activities, users, userByLogin, loading, updating, cacheLogin } = this.props;
     const { isNew } = this.state;
-
     const { pictures, picturesContentType } = placeEntity;
 
     return (
@@ -269,13 +264,9 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
                   </Label>
                   <AvInput id="place-rolePlaceUser" type="select" className="form-control" name="rolePlaceUserId">
                     <option value="" key="0" />
-                    {users
-                      ? users.map(otherEntity => (
-                          <option value={otherEntity.id} key={otherEntity.id}>
-                            {otherEntity.login}
-                          </option>
-                        ))
-                      : null}
+                      <option value={userByLogin.id} key={userByLogin.id}>
+                          {userByLogin.login}
+                        </option>
                   </AvInput>
                 </AvGroup>
                 <Button tag={Link} id="cancel-save" to="/entity/place" replace color="info">
@@ -301,15 +292,18 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
 const mapStateToProps = (storeState: IRootState) => ({
   activities: storeState.activity.entities,
   users: storeState.userManagement.users,
+  userByLogin: storeState.userManagement.user,
   placeEntity: storeState.place.entity,
   loading: storeState.place.loading,
   updating: storeState.place.updating,
-  updateSuccess: storeState.place.updateSuccess
+  updateSuccess: storeState.place.updateSuccess,
+  cacheLogin: storeState.registerPlace.cacheLogin
 });
 
 const mapDispatchToProps = {
   getActivities,
   getUsers,
+  getUserByLogin,
   getEntity,
   updateEntity,
   setBlob,

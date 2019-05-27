@@ -50,14 +50,9 @@ public class PlaceDTO implements Serializable {
 
     private String rolePlaceUserLogin;
 
-    // TODO: added by me
     private String createdBy;
 
-//    private Instant createdDate;
-
     private String lastModifiedBy;
-
-//    private Instant lastModifiedDate;
 
     public Long getId() {
         return id;

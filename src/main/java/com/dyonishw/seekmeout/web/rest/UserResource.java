@@ -191,30 +191,6 @@ public class UserResource {
                 .map(UserDTO::new));
     }
 
-    // TODO: remove this
-    /**
-     * Get /currentUser : get current user logged in
-     *
-     *
-     */
-    @GetMapping("/currentUser")
-    public ResponseEntity<UserDTO> getCurrentUser() {
-//    public String getCurrentUser() {
-
-//        Optional<String> currentUser = securityUtils.getCurrentUserLogin();
-//        Optional<UserDTO> currentLogin = userRepository.findOneByLogin(currentUser.get());
-//        Optional<User> currentLogin = userService.getUserWithAuthoritiesByLogin(currentUser.get());
-//        return new ResponseEntity<>(currentLogin.get(), HttpStatus.OK);
-//        return ResponseUtil.wrapOrNotFound(
-//            currentLogin.get()
-//                .map(UserDTO::new));
-        return ResponseUtil.wrapOrNotFound(
-            userService.getUserWithAuthorities()
-                .map(UserDTO::new));
-//        return userService.getUserWithAuthorities().get().getLogin();
-
-    }
-
     /**
      * DELETE /users/:login : delete the "login" User.
      *

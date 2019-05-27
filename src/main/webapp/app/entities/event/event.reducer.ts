@@ -14,7 +14,6 @@ export const ACTION_TYPES = {
   UPDATE_EVENT: 'event/UPDATE_EVENT',
   DELETE_EVENT: 'event/DELETE_EVENT',
   RESET: 'event/RESET'
-  FETCH_CURRENT_USER: 'userManagement/FETCH_CURRENT_USER'
 };
 
 const initialState = {
@@ -43,13 +42,6 @@ export default (state: EventState = initialState, action): EventState => {
         updateSuccess: false,
         loading: true
       };
-    case REQUEST(ACTION_TYPES.FETCH_CURRENT_USER):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        loading: true
-      };
     case REQUEST(ACTION_TYPES.CREATE_EVENT):
     case REQUEST(ACTION_TYPES.UPDATE_EVENT):
     case REQUEST(ACTION_TYPES.DELETE_EVENT):
@@ -62,8 +54,6 @@ export default (state: EventState = initialState, action): EventState => {
     case FAILURE(ACTION_TYPES.SEARCH_EVENTS):
     case FAILURE(ACTION_TYPES.FETCH_EVENT_LIST):
     case FAILURE(ACTION_TYPES.FETCH_EVENT):
-    case FAILURE(ACTION_TYPES.FETCH_CURRENT_USER):
-
     case FAILURE(ACTION_TYPES.CREATE_EVENT):
     case FAILURE(ACTION_TYPES.UPDATE_EVENT):
     case FAILURE(ACTION_TYPES.DELETE_EVENT):
