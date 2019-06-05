@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 // tslint:disable-next-line:no-unused-variable
 import {
   openFile,
@@ -22,7 +23,7 @@ import { IRootState } from 'app/shared/reducers';
 import { getSearchEntities, getEntities } from './place.reducer';
 import { IPlace } from 'app/shared/model/place.model';
 // tslint:disable-next-line:no-unused-variable
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPlaceProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
@@ -85,15 +86,15 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
   };
 
   render() {
-    const { placeList, match, totalItems } = this.props;
+    const { placeList, match, totalItems, isRolePlace, account } = this.props;
     return (
       <div>
         <h2 id="place-heading">
           <Translate contentKey="seekMeOutApp.place.home.title">Places</Translate>
-          <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+          {isRolePlace ? <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
             <Translate contentKey="seekMeOutApp.place.home.createLabel">Create new Place</Translate>
-          </Link>
+          </Link> : null}
         </h2>
         <Row>
           <Col sm="12">
@@ -196,18 +197,12 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${place.id}/edit`} color="primary" size="sm">
+                      {account.login === place.rolePlaceUserLogin ? <Button tag={Link} to={`${match.url}/${place.id}/edit`} color="primary" size="sm">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
-                      </Button>
-                      <Button tag={Link} to={`${match.url}/${place.id}/delete`} color="danger" size="sm">
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+                      </Button> : null}
                     </div>
                   </td>
                 </tr>
@@ -228,7 +223,9 @@ export class Place extends React.Component<IPlaceProps, IPlaceState> {
   }
 }
 
-const mapStateToProps = ({ place }: IRootState) => ({
+const mapStateToProps = ({ authentication, place }: IRootState) => ({
+  isRolePlace: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.PLACE]),
+  account: authentication.account,
   placeList: place.entities,
   totalItems: place.totalItems
 });

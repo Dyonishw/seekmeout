@@ -17,6 +17,7 @@ export interface IPlace {
   placeEvents?: IEvent[];
   rolePlaceUserLogin?: string;
   rolePlaceUserId?: number;
+  createdBy?: string;
 }
 
 export const defaultValue: Readonly<IPlace> = {};
