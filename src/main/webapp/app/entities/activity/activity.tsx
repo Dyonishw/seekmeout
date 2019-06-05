@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
@@ -20,7 +21,7 @@ import { IRootState } from 'app/shared/reducers';
 import { getSearchEntities, getEntities } from './activity.reducer';
 import { IActivity } from 'app/shared/model/activity.model';
 // tslint:disable-next-line:no-unused-variable
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IActivityProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
@@ -83,15 +84,15 @@ export class Activity extends React.Component<IActivityProps, IActivityState> {
   };
 
   render() {
-    const { activityList, match, totalItems } = this.props;
+    const { activityList, match, totalItems, isAdmin } = this.props;
     return (
       <div>
         <h2 id="activity-heading">
           <Translate contentKey="seekMeOutApp.activity.home.title">Activities</Translate>
-          <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+          {isAdmin ? (<Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
             <Translate contentKey="seekMeOutApp.activity.home.createLabel">Create new Activity</Translate>
-          </Link>
+          </Link>) : null }
         </h2>
         <Row>
           <Col sm="12">
@@ -173,18 +174,18 @@ export class Activity extends React.Component<IActivityProps, IActivityState> {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${activity.id}/edit`} color="primary" size="sm">
+                      {isAdmin ? <Button tag={Link} to={`${match.url}/${activity.id}/edit`} color="primary" size="sm">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
-                      </Button>
-                      <Button tag={Link} to={`${match.url}/${activity.id}/delete`} color="danger" size="sm">
+                      </Button> : null }
+                      {isAdmin ? <Button tag={Link} to={`${match.url}/${activity.id}/delete`} color="danger" size="sm">
                         <FontAwesomeIcon icon="trash" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.delete">Delete</Translate>
                         </span>
-                      </Button>
+                      </Button> : null }
                     </div>
                   </td>
                 </tr>
@@ -205,7 +206,8 @@ export class Activity extends React.Component<IActivityProps, IActivityState> {
   }
 }
 
-const mapStateToProps = ({ activity }: IRootState) => ({
+const mapStateToProps = ({ authentication, activity }: IRootState) => ({
+  isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   activityList: activity.entities,
   totalItems: activity.totalItems
 });

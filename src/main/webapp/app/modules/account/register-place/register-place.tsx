@@ -28,7 +28,7 @@ export class RegisterPlacePage extends React.Component<IRegisterProps, IRegister
     this.props.handlePlaceRegister(values.username, values.email, values.firstPassword, this.props.currentLocale);
     event.preventDefault();
   };
-  
+
   componentDidUpdate(prevProps: IRegisterProps, prevState) {
     if ((this.props !== prevProps) && (this.props.registrationSuccess === true)) {
       this.redirectToCreate();

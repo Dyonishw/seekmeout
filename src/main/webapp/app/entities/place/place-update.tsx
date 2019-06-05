@@ -11,7 +11,7 @@ import { IRootState } from 'app/shared/reducers';
 import { IActivity } from 'app/shared/model/activity.model';
 import { getEntities as getActivities } from 'app/entities/activity/activity.reducer';
 import { IUser } from 'app/shared/model/user.model';
-import { getUsers, getUserByLogin} from 'app/modules/administration/user-management/user-management.reducer';
+import { getUsers, getUserByLogin } from 'app/modules/administration/user-management/user-management.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './place.reducer';
 import { IPlace } from 'app/shared/model/place.model';
 // tslint:disable-next-line:no-unused-variable

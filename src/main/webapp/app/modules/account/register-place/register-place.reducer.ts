@@ -25,13 +25,13 @@ export default (state: RegisterPlaceState = initialState, action): RegisterPlace
     case REQUEST(ACTION_TYPES.CREATE_PLACE_ACCOUNT):
       return {
         ...state,
-        loading: true,
+        loading: true
       };
     case FAILURE(ACTION_TYPES.CREATE_PLACE_ACCOUNT):
       return {
         ...initialState,
         registrationFailure: true,
-        errorMessage: action.payload.response.data.errorKey,
+        errorMessage: action.payload.response.data.errorKey
       };
     case SUCCESS(ACTION_TYPES.CREATE_PLACE_ACCOUNT):
       return {

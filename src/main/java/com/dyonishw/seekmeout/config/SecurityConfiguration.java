@@ -110,6 +110,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/users").permitAll()
             .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
             .antMatchers(HttpMethod.GET,"/api/activities").permitAll()
+            .antMatchers("/api/activities/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers(HttpMethod.PUT,"/api/places").hasAuthority(AuthoritiesConstants.PLACE)
             .antMatchers(HttpMethod.DELETE,"/api/places/**").hasAuthority(AuthoritiesConstants.PLACE)
             .antMatchers("/api/places/**").permitAll()
