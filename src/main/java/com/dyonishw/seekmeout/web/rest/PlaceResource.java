@@ -1,4 +1,5 @@
 package com.dyonishw.seekmeout.web.rest;
+import com.dyonishw.seekmeout.security.SecurityUtils;
 import com.dyonishw.seekmeout.service.PlaceService;
 import com.dyonishw.seekmeout.web.rest.errors.BadRequestAlertException;
 import com.dyonishw.seekmeout.web.rest.util.HeaderUtil;
@@ -84,10 +85,17 @@ public class PlaceResource {
         if (placeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PlaceDTO result = placeService.save(placeDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, placeDTO.getId().toString()))
-            .body(result);
+
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent() && userLogin.get().equals(placeDTO.getRolePlaceUserLogin())) {
+
+            PlaceDTO result = placeService.save(placeDTO);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, placeDTO.getId().toString()))
+                .body(result);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**
