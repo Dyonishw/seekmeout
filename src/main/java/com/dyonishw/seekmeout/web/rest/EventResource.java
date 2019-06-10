@@ -1,5 +1,9 @@
 package com.dyonishw.seekmeout.web.rest;
+import com.dyonishw.seekmeout.security.SecurityUtils;
 import com.dyonishw.seekmeout.service.EventService;
+import com.dyonishw.seekmeout.service.UserService;
+import com.dyonishw.seekmeout.service.dto.PlaceDTO;
+import com.dyonishw.seekmeout.service.dto.UserDTO;
 import com.dyonishw.seekmeout.web.rest.errors.BadRequestAlertException;
 import com.dyonishw.seekmeout.web.rest.util.HeaderUtil;
 import com.dyonishw.seekmeout.web.rest.util.PaginationUtil;
@@ -41,9 +45,12 @@ public class EventResource {
 
     private final EventQueryService eventQueryService;
 
-    public EventResource(EventService eventService, EventQueryService eventQueryService) {
+    private final UserService userService;
+
+    public EventResource(EventService eventService, EventQueryService eventQueryService, UserService userService) {
         this.eventService = eventService;
         this.eventQueryService = eventQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -80,10 +87,28 @@ public class EventResource {
         if (eventDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        EventDTO result = eventService.save(eventDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, eventDTO.getId().toString()))
-            .body(result);
+
+        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent() && userLogin.get().equals(eventDTO.getCreatedBy())) {
+
+            EventDTO result = eventService.save(eventDTO);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, eventDTO.getId().toString()))
+                .body(result);
+        } else if (userLogin.isPresent() != userLogin.get().equals(eventDTO.getCreatedBy())) {
+            
+            Optional<EventDTO> setAttendingUsers = eventService.findOne(eventDTO.getId());
+            setAttendingUsers
+                .get()
+                .setEventUsers(eventDTO.getEventUsers());
+
+            EventDTO result = eventService.save(setAttendingUsers.get());
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, eventDTO.getId().toString()))
+                .body(result);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**

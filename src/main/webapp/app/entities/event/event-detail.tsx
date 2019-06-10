@@ -98,12 +98,6 @@ export class EventDetail extends React.Component<IEventDetailProps> {
               <Translate contentKey="entity.action.back">Back</Translate>
             </span>
           </Button>&nbsp;
-          <Button tag={Link} to={`/entity/event/${eventEntity.id}/edit`} replace color="primary">
-            <FontAwesomeIcon icon="pencil-alt" />{' '}
-            <span className="d-none d-md-inline">
-              <Translate contentKey="entity.action.edit">Edit</Translate>
-            </span>
-          </Button>
           <Button type="button" className="input-group-addon" onClick={this.addAccount}>
             <FontAwesomeIcon icon="user-check" />
             <span className="d-none d-md-inline">

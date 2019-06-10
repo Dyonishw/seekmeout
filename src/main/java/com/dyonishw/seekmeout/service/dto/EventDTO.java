@@ -21,7 +21,6 @@ public class EventDTO implements Serializable {
 
     private String casualDescription;
 
-
     private Long activityEventId;
 
     private String activityEventType;
@@ -31,6 +30,10 @@ public class EventDTO implements Serializable {
     private String placeEventName;
 
     private Set<UserDTO> eventUsers = new HashSet<>();
+
+    private String createdBy;
+
+    private String lastModifiedBy;
 
     public Long getId() {
         return id;
@@ -104,6 +107,22 @@ public class EventDTO implements Serializable {
         this.eventUsers = users;
     }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -136,6 +155,9 @@ public class EventDTO implements Serializable {
             ", activityEvent='" + getActivityEventType() + "'" +
             ", placeEvent=" + getPlaceEventId() +
             ", placeEvent='" + getPlaceEventName() + "'" +
+            ", eventUsers='" + getEventUsers() + "'" +
+            ", createdBy=" + createdBy +
+            ", lastModifiedBy='" + lastModifiedBy + '\'' +
             "}";
     }
 }

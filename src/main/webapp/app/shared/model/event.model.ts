@@ -11,6 +11,10 @@ export interface IEvent {
   placeEventName?: string;
   placeEventId?: number;
   eventUsers?: IUser[];
+  createdBy?: string;
+  createdDate?: Date;
+  lastModifiedBy?: string;
+  lastModifiedDate?: Date;  
 }
 
 export const defaultValue: Readonly<IEvent> = {

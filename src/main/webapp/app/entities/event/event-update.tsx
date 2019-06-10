@@ -80,7 +80,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
   };
 
   render() {
-    const { eventEntity, activities, places, users, loading, updating } = this.props;
+    const { eventEntity, activities, places, users, loading, updating, account } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -205,6 +205,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  account: storeState.authentication.account,
   activities: storeState.activity.entities,
   places: storeState.place.entities,
   users: storeState.userManagement.users,

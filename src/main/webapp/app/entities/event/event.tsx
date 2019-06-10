@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
@@ -21,7 +22,7 @@ import { IRootState } from 'app/shared/reducers';
 import { getSearchEntities, getEntities } from './event.reducer';
 import { IEvent } from 'app/shared/model/event.model';
 // tslint:disable-next-line:no-unused-variable
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IEventProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
@@ -84,15 +85,15 @@ export class Event extends React.Component<IEventProps, IEventState> {
   };
 
   render() {
-    const { eventList, match, totalItems } = this.props;
+    const { eventList, match, totalItems, isRoleUser, account } = this.props;
     return (
       <div>
         <h2 id="event-heading">
           <Translate contentKey="seekMeOutApp.event.home.title">Events</Translate>
-          <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+          {isRoleUser ? <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
             <Translate contentKey="seekMeOutApp.event.home.createLabel">Create new Event</Translate>
-          </Link>
+          </Link> : null }
         </h2>
         <Row>
           <Col sm="12">
@@ -166,18 +167,18 @@ export class Event extends React.Component<IEventProps, IEventState> {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button tag={Link} to={`${match.url}/${event.id}/edit`} color="primary" size="sm">
+                      { account.login === event.createdBy ? <Button tag={Link} to={`${match.url}/${event.id}/edit`} color="primary" size="sm">
                         <FontAwesomeIcon icon="pencil-alt" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
-                      </Button>
-                      <Button tag={Link} to={`${match.url}/${event.id}/delete`} color="danger" size="sm">
+                      </Button> : null }
+                      { account.login === event.createdBy ? <Button tag={Link} to={`${match.url}/${event.id}/delete`} color="danger" size="sm">
                         <FontAwesomeIcon icon="trash" />{' '}
                         <span className="d-none d-md-inline">
                           <Translate contentKey="entity.action.delete">Delete</Translate>
                         </span>
-                      </Button>
+                      </Button> : null }
                     </div>
                   </td>
                 </tr>
@@ -198,7 +199,9 @@ export class Event extends React.Component<IEventProps, IEventState> {
   }
 }
 
-const mapStateToProps = ({ event }: IRootState) => ({
+const mapStateToProps = ({ authentication, event }: IRootState) => ({
+  isRoleUser: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.USER]),
+  account: authentication.account,
   eventList: event.entities,
   totalItems: event.totalItems
 });

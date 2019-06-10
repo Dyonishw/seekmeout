@@ -18,6 +18,9 @@ export interface IPlace {
   rolePlaceUserLogin?: string;
   rolePlaceUserId?: number;
   createdBy?: string;
+  createdDate?: Date;
+  lastModifiedBy?: string;
+  lastModifiedDate?: Date;
 }
 
 export const defaultValue: Readonly<IPlace> = {};

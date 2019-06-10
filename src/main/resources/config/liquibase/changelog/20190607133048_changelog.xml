@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="root (generated)" id="1559914252952-1">
+        <createTable tableName="event_event_user">
+            <column name="event_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="root (generated)" id="1559914252952-2">
+        <addPrimaryKey columnNames="event_id, event_user_id" tableName="event_event_user"/>
+    </changeSet>
+    <changeSet author="root (generated)" id="1559914252952-3">
+        <addForeignKeyConstraint baseColumnNames="event_user_id" baseTableName="event_event_user" constraintName="FKawo6ruq0n0nvc0y7phor6gsbu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="root (generated)" id="1559914252952-4">
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="event_event_user" constraintName="FKiwi84ln9cswbo2msrqmfn00n6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="event"/>
+    </changeSet>
+</databaseChangeLog>

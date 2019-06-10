@@ -19,8 +19,10 @@
     <!--<include file="config/liquibase/changelog/20190517063707_changelog.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20190517130744_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190520114409_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190607133048_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190610124147_changelog.xml" relativeToChangelogFile="false"/>
 
-        <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+            <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20190408055125_added_entity_constraints_Place.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190408060336_added_entity_constraints_Event.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
