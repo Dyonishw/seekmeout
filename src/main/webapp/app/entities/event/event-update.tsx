@@ -94,6 +94,26 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
         </Row>
         <Row className="justify-content-center">
           <Col md="8">
+            <dl className="jh-entity-details">
+              <dt>
+                <span id="casual">
+                  <Translate contentKey="seekMeOutApp.event.eventUser">Event User</Translate>
+                </span>
+              </dt>
+              <dd>
+              {eventEntity.eventUsers
+                      ? eventEntity.eventUsers.map(otherEntity => (
+                          <option value={otherEntity.id} key={otherEntity.id}>
+                            {otherEntity.login}
+                          </option>
+                        ))
+                      : null}
+              </dd>
+            </dl>
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col md="8">
             {loading ? (
               <p>Loading...</p>
             ) : (
@@ -162,6 +182,7 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                       : null}
                   </AvInput>
                 </AvGroup>
+                {!isNew ?
                 <AvGroup>
                   <Label for="users">
                     <Translate contentKey="seekMeOutApp.event.eventUser">Event User</Translate>
@@ -173,10 +194,11 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                     className="form-control"
                     name="eventUsers"
                     value={eventEntity.eventUsers && eventEntity.eventUsers.map(e => e.id)}
+                    required hidden
                   >
                     <option value="" key="0" />
-                    {users
-                      ? users.map(otherEntity => (
+                    {eventEntity.eventUsers
+                      ? eventEntity.eventUsers.map(otherEntity => (
                           <option value={otherEntity.id} key={otherEntity.id}>
                             {otherEntity.login}
                           </option>
@@ -184,6 +206,21 @@ export class EventUpdate extends React.Component<IEventUpdateProps, IEventUpdate
                       : null}
                   </AvInput>
                 </AvGroup>
+                :
+                <AvGroup>
+                  <AvInput id="event-eventUser"
+                    type="select"
+                    multiple
+                    className="form-control"
+                    name="eventUsers"
+                    value={eventEntity.eventUsers}
+                    required hidden
+                  >
+                    <option value={account.id} key={account.id}>
+                        {account.login}
+                    </option>
+                    </AvInput>
+                </AvGroup> }
                 <Button tag={Link} id="cancel-save" to="/entity/event" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
                   <span className="d-none d-md-inline">

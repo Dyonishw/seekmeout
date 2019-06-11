@@ -83,7 +83,7 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
   };
 
   render() {
-    const { placeEntity, activities, users, userByLogin, loading, updating, cacheLogin } = this.props;
+    const { placeEntity, activities, users, userByLogin, loading, updating, cacheLogin, account } = this.props;
     const { isNew } = this.state;
     const { pictures, picturesContentType } = placeEntity;
 
@@ -258,17 +258,30 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
                       : null}
                   </AvInput>
                 </AvGroup>
-                <AvGroup>
-                  <Label for="rolePlaceUser.login">
-                    <Translate contentKey="seekMeOutApp.place.rolePlaceUser">Role Place User</Translate>
-                  </Label>
-                  <AvInput id="place-rolePlaceUser" type="select" className="form-control" name="rolePlaceUserId">
-                    <option value="" key="0" />
-                      <option value={userByLogin.id} key={userByLogin.id}>
-                          {userByLogin.login}
-                        </option>
-                  </AvInput>
-                </AvGroup>
+                {isNew ?
+                  <AvGroup>
+                    <Label for="rolePlaceUser.login">
+                      <Translate contentKey="seekMeOutApp.place.rolePlaceUser">Role Place User</Translate>
+                    </Label>
+                    <AvInput id="place-rolePlaceUser" type="select" className="form-control" name="rolePlaceUserId">
+                      <option value="" key="0" />
+                        <option value={userByLogin.id} key={userByLogin.id}>
+                            {userByLogin.login}
+                          </option>
+                    </AvInput>
+                  </AvGroup>
+                :
+                  <AvGroup>
+                    <Label for="rolePlaceUser.login">
+                      <Translate contentKey="seekMeOutApp.place.rolePlaceUser">Role Place User</Translate>
+                    </Label>
+                    <AvInput id="place-rolePlaceUser" type="select" className="form-control" name="rolePlaceUserId">
+                        <option value={placeEntity.rolePlaceUserId} key={placeEntity.rolePlaceUserId}>
+                            {placeEntity.rolePlaceUserLogin}
+                          </option>
+                    </AvInput>
+                  </AvGroup>
+                }
                 <Button tag={Link} id="cancel-save" to="/entity/place" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
                   <span className="d-none d-md-inline">
@@ -290,6 +303,7 @@ export class PlaceUpdate extends React.Component<IPlaceUpdateProps, IPlaceUpdate
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  account: storeState.authentication.account,
   activities: storeState.activity.entities,
   users: storeState.userManagement.users,
   userByLogin: storeState.userManagement.user,

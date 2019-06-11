@@ -96,7 +96,7 @@ public class EventResource {
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, eventDTO.getId().toString()))
                 .body(result);
         } else if (userLogin.isPresent() != userLogin.get().equals(eventDTO.getCreatedBy())) {
-            
+
             Optional<EventDTO> setAttendingUsers = eventService.findOne(eventDTO.getId());
             setAttendingUsers
                 .get()

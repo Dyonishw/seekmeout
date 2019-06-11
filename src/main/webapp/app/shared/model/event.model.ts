@@ -14,7 +14,7 @@ export interface IEvent {
   createdBy?: string;
   createdDate?: Date;
   lastModifiedBy?: string;
-  lastModifiedDate?: Date;  
+  lastModifiedDate?: Date;
 }
 
 export const defaultValue: Readonly<IEvent> = {
